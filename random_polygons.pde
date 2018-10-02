@@ -9,6 +9,9 @@ int maxVertices = 12;
 void setup() {
   size(640, 360);
   background(255);
+}
+
+void draw() {  
   // escolhe aleatoriamente uma cor RGB para o objeto a ser desenhado e de seu contorno
   color preenchimento = color((int)random(255), (int)random(255), (int)random(255));
   color contorno = color((int)random(255), (int)random(255), (int)random(255));
@@ -27,10 +30,6 @@ void setup() {
   }
   
   desenhaPoligono(pontos, linhas, contorno, ((int)random(2)) == 0, preenchimento);
-}
-
-void draw() {  
-  
 }
 
 void linhaDDA (int xi, int yi, int xf, int yf) {
@@ -102,8 +101,9 @@ void desenhaPoligono(int[][] P, int[][] L, color cor_linha, boolean preenche, co
       }
     }
     
-    // pra cada linha de varredura
+    // TODO verificar caso em que linhas se tocam no meio da figura
     
+    // pra cada linha de varredura
     for(int i = Ymin; i < Ymax; i++) {
       // verifica os X que intersectam
       int [] intersec = {};
