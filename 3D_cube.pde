@@ -1,6 +1,5 @@
 /**
- * Author: Bryan Lincoln
- * Created at: October 1st, 2018
+ * Aluno: Bryan Lincoln
  */
 
 void setup() {
@@ -237,11 +236,6 @@ class Object {
   PVector rotation;
   PVector scale;
   
-  // matrizes de rotação previamente calculadas
-  float[][] rotX;
-  float[][] rotY;
-  float[][] rotZ;
-  
   void init(float[][] vertices, int[][] arestas) {
     this.position = new PVector(0, 0, 0);
     this.rotation = new PVector(0, 0, 0);
@@ -249,10 +243,6 @@ class Object {
     
     this.vertices = vertices;
     this.arestas = arestas;
-    
-    initRotations();
-    
-    rotate(new PVector(0, 0, 0));
   }
   void init(float[][] vertices, int[][] arestas, PVector position) {
     init(vertices, arestas);
@@ -262,17 +252,6 @@ class Object {
     init(vertices, arestas, position);
     this.rotation = rotation;
     this.scale = scale;
-    rotate(new PVector(0, 0, 0));
-  }
-  
-  void initRotations() {
-    rotX = new float[3][3];
-    rotY = new float[3][3];
-    rotZ = new float[3][3];
-    
-    rotX[0][0] = 1;
-    rotY[1][1] = 1;
-    rotZ[2][2] = 1;
   }
   
   void translate(PVector delta) {
@@ -280,18 +259,6 @@ class Object {
   }
   void rotate(PVector delta) {
     rotation.add(delta);
-    
-    rotX[1][1] = rotX[2][2] = cos(rotation.x);
-    rotX[1][2] = sin(rotation.x);
-    rotX[2][1] = -rotX[1][2]; 
-    
-    rotY[0][0] = rotY[2][2] = cos(rotation.y);
-    rotY[0][2] = sin(rotation.y);
-    rotY[2][0] = -rotY[0][2]; 
-    
-    rotZ[0][0] = rotZ[1][1] = cos(rotation.z);
-    rotZ[0][1] = sin(rotation.z);
-    rotZ[1][0] = -rotZ[0][1]; 
   }
   
   void rescale(PVector delta) {
@@ -301,29 +268,22 @@ class Object {
   void show() {    
     float[][] tempVertices = new float[vertices.length][3];
     
-    // rotaciona em x
+    // rotaciona
     for(int i = 0; i < tempVertices.length; i++){
-      for(int j = 0; j < tempVertices[i].length; j++){
-        for(int k = 0; k < rotX.length; k++){
-          tempVertices[i][j]= tempVertices[i][j] + vertices[i][k] * rotX[k][j];
-        }
-      }
-    }
-    // rotaciona em y
-    for(int i = 0; i < tempVertices.length; i++){
-      for(int j = 0; j < tempVertices[i].length; j++){
-        for(int k = 0; k < rotY.length; k++){
-          tempVertices[i][j]= tempVertices[i][j] + vertices[i][k] * rotY[k][j];
-        }
-      }
-    }
-    // rotaciona em z
-    for(int i = 0; i < tempVertices.length; i++){
-      for(int j = 0; j < tempVertices[i].length; j++){
-        for(int k = 0; k < rotZ.length; k++){
-          tempVertices[i][j]= tempVertices[i][j] + vertices[i][k] * rotZ[k][j];
-        }
-      }
+      // em x
+      tempVertices[i][1] = vertices[i][1] * cos(rotation.x) - vertices[i][2] * (sin(rotation.x)); // y
+      tempVertices[i][2] = vertices[i][1] * sin(rotation.x) + vertices[i][2] * (cos(rotation.x)); // z
+      float y = tempVertices[i][1];
+      float z = tempVertices[i][2];
+      
+      // em y
+      tempVertices[i][0] = vertices[i][0] * cos(rotation.y) + z * (sin(rotation.y)); // x
+      tempVertices[i][2] = -vertices[i][0] * sin(rotation.y) + z * (cos(rotation.y)); // z
+      float x = tempVertices[i][0];
+      
+      // em z
+      tempVertices[i][0] = x * cos(rotation.z) - y * (sin(rotation.z)); // x
+      tempVertices[i][1] = x * sin(rotation.z) + y * (cos(rotation.z)); // y
     }
     
     // escala
