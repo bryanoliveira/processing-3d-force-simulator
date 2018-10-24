@@ -1,6 +1,8 @@
 /**
  * Aluno: Bryan Lincoln
  */
+ 
+int projecao = 0;
 
 void setup() {
   size(1280, 720);
@@ -9,7 +11,9 @@ void setup() {
 
 void draw() {
   background(255);
- 
+  textSize(16);
+  fill(0);
+  
   // pega os keystrokes que não são codificados
   if(keyPressed) {
     if(key == CODED) {
@@ -23,10 +27,10 @@ void draw() {
       switch(key) {
         // translação
         case 'w':
-          World.translateLast(0, 1.05, 0);
+          World.translateLast(0, -1.05, 0);
           break;
         case 's':
-          World.translateLast(0, -1.05, 0);
+          World.translateLast(0, 1.05, 0);
           break;
         case 'a':
           World.translateLast(-1.05, 0, 0);
@@ -49,16 +53,16 @@ void draw() {
           World.rotateLast(0, -0.05, 0);
           break;
         case 'i':
-          World.rotateLast(0.05, 0, 0);
-          break;
-        case 'k':
           World.rotateLast(-0.05, 0, 0);
           break;
+        case 'k':
+          World.rotateLast(0.05, 0, 0);
+          break;
         case 'o':
-          World.rotateLast(0, 0, -0.05);
+          World.rotateLast(0, 0, 0.05);
           break;
         case 'u':
-          World.rotateLast(0, 0, 0.05);
+          World.rotateLast(0, 0, -0.05);
           break;
           
         // escala
@@ -69,22 +73,39 @@ void draw() {
           World.scaleLast(0, -0.05, 0);
           break;
         case 'f':
-          World.scaleLast(0.05, 0, 0);
-          break;
-        case 'h':
           World.scaleLast(-0.05, 0, 0);
           break;
+        case 'h':
+          World.scaleLast(0.05, 0, 0);
+          break;
         case 'r':
-          World.scaleLast(0, 0, 0.05);
+          World.scaleLast(0, 0, -0.05);
           break;
         case 'y':
-          World.scaleLast(0, 0, -0.05);
+          World.scaleLast(0, 0, 0.05);
           break;
       }
     }
   }
   
-  World.render();
+  switch(projecao) {
+    case 1:
+      text("Projeção (P): Oblíqua Cabinet", width - 240, 25);
+      break;
+    case 2:
+      text("Projeção (P): Ortográfica Isométrica", width - 290, 25);
+      break;
+    case 3:
+      text("Projeção (P): Perspectiva (Z)", width - 230, 25);
+      break;
+    case 4:
+      text("Projeção (P): Perspectiva (X, Z)", width - 248, 25);
+      break;
+    default:
+      text("Projeção (P): Oblíqua Cavaleira", width - 250, 25);
+  }
+  
+  World.render(projecao);
 }
 
 // pega só uma vez
@@ -100,27 +121,27 @@ void keyPressed() {
       case '.':
         World.destroyLast();
         break;
+      case 'p':
+        projecao = (projecao + 1) % 5;
     }
   }
 }
 
 void showHelp() {
   int offset = 1;
-  textSize(16);
-  fill(0);
   text("n: Instanciar cubo", 10, 10 + 16 * (offset++));
   text("w: Move último objeto criado pra cima", 10, 10 + 16 * (offset++));
   text("s: Move para baixo", 10, 10 + 16 * (offset++));
-  text("a: Move para a direita", 10, 10 + 16 * (offset++));
-  text("d: Move para a esquerda", 10, 10 + 16 * (offset++));
-  text("e: Move para frente", 10, 10 + 16 * (offset++));
-  text("q: Move para trás", 10, 10 + 16 * (offset++));
+  text("a: Move para a esquerda", 10, 10 + 16 * (offset++));
+  text("d: Move para a direita", 10, 10 + 16 * (offset++));
+  text("e: Move para trás", 10, 10 + 16 * (offset++));
+  text("q: Move para frente", 10, 10 + 16 * (offset++));
   text("t: Reescala para mais em y", 10, 10 + 16 * (offset++));
   text("g: Reescala para menos em y", 10, 10 + 16 * (offset++));
-  text("f: Reescala para mais em x", 10, 10 + 16 * (offset++));
-  text("h: Reescala para menos em x", 10, 10 + 16 * (offset++));
-  text("r: Reescala para mais em z", 10, 10 + 16 * (offset++));
-  text("y: Reescala para menos em z", 10, 10 + 16 * (offset++));
+  text("f: Reescala para menos em x", 10, 10 + 16 * (offset++));
+  text("h: Reescala para mais em x", 10, 10 + 16 * (offset++));
+  text("r: Reescala para menos em z", 10, 10 + 16 * (offset++));
+  text("y: Reescala para mais em z", 10, 10 + 16 * (offset++));
   text("i: Rotaciona para cima", 10, 10 + 16 * (offset++));
   text("k: Rotaciona para baixo", 10, 10 + 16 * (offset++));
   text("j: Rotaciona para esquerda", 10, 10 + 16 * (offset++));
@@ -147,14 +168,14 @@ static class World {
   
   static void create(Object object) {
     float[][] vertices = {
-      {-10, -10, -10},
-      {-10, -10, 10},
-      {-10, 10, -10},
-      {-10, 10, 10},
-      {10, -10, -10},
-      {10, -10, 10},
-      {10, 10, -10},
-      {10, 10, 10}
+      {-50, -50, -50},
+      {-50, -50, 50},
+      {-50, 50, -50},
+      {-50, 50, 50},
+      {50, -50, -50},
+      {50, -50, 50},
+      {50, 50, -50},
+      {50, 50, 50}
     };
     int[][] arestas = {
       {0, 1},
@@ -170,7 +191,7 @@ static class World {
       {5, 7},
       {6, 7}
     };
-    object.init(vertices, arestas, new PVector(ref_x, ref_y));
+    object.init(vertices, arestas, new PVector(ref_x, ref_y), new PVector(0, 0, 0));
     objects.add(object);
   }
   
@@ -184,7 +205,7 @@ static class World {
     arrayCopy(last.vertices, vertices);
     arrayCopy(last.arestas, arestas);
     
-    newObject.init(vertices, arestas, last.position.copy(), last.rotation.copy(), last.scale.copy());
+    newObject.init(vertices, arestas, last.worldPosition.copy(), last.position.copy(), last.rotation.copy(), last.scale.copy());
     objects.add(newObject);
   }
   
@@ -195,11 +216,26 @@ static class World {
     objects.remove(objects.size() - 1);
   }
   
-  static void render() {
+  static void render(int projecao) {
     // desenha os objetos na tela
     for(int i = 0; i < objects.size(); i++) {
       Object object = objects.get(i);
-      object.show();
+      switch(projecao) {
+        case 1:
+          object.cabinet();
+          break;
+        case 2:
+          object.isometric();
+          break;
+        case 3:
+          object.perspectiveZ();
+          break;
+        case 4:
+          object.perspectiveXZ();
+          break;
+        default:
+          object.cavaleira();
+      }
     }
   }
   
@@ -229,14 +265,17 @@ static class World {
 class Object {
   // definições imutáveis do objeto
   float[][] vertices;
+  float[][] tempVertices;
   int[][] arestas;
   
   // vetores mutáveis de estado
+  PVector worldPosition;
   PVector position;
   PVector rotation;
   PVector scale;
   
-  void init(float[][] vertices, int[][] arestas) {
+  void init(float[][] vertices, int[][] arestas, PVector worldPosition) {
+    this.worldPosition = worldPosition;
     this.position = new PVector(0, 0, 0);
     this.rotation = new PVector(0, 0, 0);
     this.scale = new PVector(1, 1, 1);
@@ -244,12 +283,12 @@ class Object {
     this.vertices = vertices;
     this.arestas = arestas;
   }
-  void init(float[][] vertices, int[][] arestas, PVector position) {
-    init(vertices, arestas);
+  void init(float[][] vertices, int[][] arestas, PVector worldPosition, PVector position) {
+    init(vertices, arestas, worldPosition);
     this.position = position;
   }
-  void init(float[][] vertices, int[][] arestas, PVector position, PVector rotation, PVector scale) {
-    init(vertices, arestas, position);
+  void init(float[][] vertices, int[][] arestas, PVector worldPosition, PVector position, PVector rotation, PVector scale) {
+    init(vertices, arestas, worldPosition, position);
     this.rotation = rotation;
     this.scale = scale;
   }
@@ -265,9 +304,7 @@ class Object {
     scale.add(delta);
   }
   
-  void show() {    
-    float[][] tempVertices = new float[vertices.length][3];
-    
+  void transform() {
     // rotaciona
     for(int i = 0; i < tempVertices.length; i++){
       // em x
@@ -288,41 +325,160 @@ class Object {
     
     // escala
     for(int i = 0; i < tempVertices.length; i++) {
-      for(int j = 0; j < tempVertices[i].length; j++) {
+      for(int j = 0; j < 3; j++) {
         tempVertices[i][j] *= scale.array()[j];
       }
     }
     
     // translada
     for(int i = 0; i < tempVertices.length; i++) {
-      for(int j = 0; j < tempVertices[i].length; j++) {
+      for(int j = 0; j < 3; j++) {
         tempVertices[i][j] += position.array()[j];
       }
     }
+  }
+  
+  void transformWorld() {
+    // translada
+    for(int i = 0; i < tempVertices.length; i++) {
+      for(int j = 0; j < 2; j++) {
+        tempVertices[i][j] += worldPosition.array()[j];
+      }
+    }
+  }
+  
+  void cavaleira() {
+    tempVertices = new float[vertices.length][4];
+    int angle = 45;
     
-    // perspectiva cavaleira 45
-    
-    int w = World.maxX - World.minX, h = World.maxY - World.minY;
-    float m = min(width/w, height/h);
-    float dxdz = (width - w*m) / 2.0, dydz = (height - h*m) / 2.0;
-    float r2d2 = cos((3 * PI) / 4);
+    transform();
     
     for(int i = 0; i < tempVertices.length; i++) {
-      float x = tempVertices[i][0], y = tempVertices[i][1], z = tempVertices[i][2];
+      float[][] hPoint = {
+        {tempVertices[i][0], tempVertices[i][1], tempVertices[i][2], 1}
+      };
       
-      float x1 = x - World.minX, y1 = World.maxY - y, z1 = z - World.maxZ;
-      
-      float x2 = x1 * m + dxdz, y2 = y1 * m + dydz, z2 = z1 * m;
-      
-      float x3 = x2 + z2 * r2d2;
-      float y3 = y2 - z2 * r2d2;
-      
-      tempVertices[i][0] = x + 0.707*z;
-      tempVertices[i][1] = y - 0.707*z;
+      // projeção cavaleira 45
+      float[][] mCav = {
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 0, 0, 0},
+        {cos(angle * PI/180.0) * tempVertices[i][2], -sin(angle * PI/180.0) * tempVertices[i][2], 0, 1},
+      };
+      tempVertices[i] = multMatrix(hPoint, mCav)[0];
     }
     
-    stroke(0);
+    toCartesian();
+    transformWorld();
+    
+    show();
+  }
+  void cabinet() {
+    tempVertices = new float[vertices.length][4];
+    int angle = 45;
+    
+    transform();
+    
+    for(int i = 0; i < tempVertices.length; i++) {
+      float[][] hPoint = {
+        {tempVertices[i][0], tempVertices[i][1], tempVertices[i][2], 1}
+      };
+      
+      // projeção cabinet 45
+      float[][] mCav = {
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 0, 0, 0},
+        {cos(angle * PI/180.0) * tempVertices[i][2] / 2, -sin(angle * PI/180) * tempVertices[i][2] / 2, 0, 1},
+      };
+      tempVertices[i] = multMatrix(hPoint, mCav)[0];
+    }
+    
+    toCartesian();
+    transformWorld();
+    
+    show();
+  }
+  void isometric() {
+    tempVertices = new float[vertices.length][4];
+    
+    transform();
+    
+    for(int i = 0; i < tempVertices.length; i++) {
+      float[][] hPoint = {
+        {tempVertices[i][0], tempVertices[i][1], tempVertices[i][2], 1}
+      };
+      
+      // projeção isométrica 45
+      float[][] iso = {
+        {cos(45 * PI/180), sin(35.26 * PI/180)*sin(45 * PI/180), 0, 0},
+        {0, cos(35.26 * PI/180), 0, 0},
+        {sin(45 * PI/180), -sin(35.26 * PI/180)*cos(45 * PI/180), 0, 0},
+        {0, 0, 0, 1},
+      };
+      
+      tempVertices[i] = multMatrix(hPoint, iso)[0];
+
+    }
+    
+    toCartesian();
+    transformWorld();
+    
+    show();
+  }
+  void perspectiveZ() {
+    tempVertices = new float[vertices.length][4];
+    transform();
+    
+    for(int i = 0; i < tempVertices.length; i++) {
+      float[][] hPoint = {
+        {tempVertices[i][0], tempVertices[i][1], tempVertices[i][2] + position.z, 1}
+      };
+      
+      // projeção perspectiva em z
+      float[][] pers = {
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 0, 0, 1.0/width},
+        {0, 0, 0, 1},
+      };
+      
+      tempVertices[i] = multMatrix(hPoint, pers)[0];
+    }
+    
+    toCartesian();
+    transformWorld();
+    
+    show();
+  }
+  void perspectiveXZ() {
+    tempVertices = new float[vertices.length][4];
+    transform();
+    
+    for(int i = 0; i < tempVertices.length; i++) {
+      float[][] hPoint = {
+        {tempVertices[i][0] + position.x, tempVertices[i][1] + position.y, tempVertices[i][2] + position.z, 1}
+      };
+      // projeção perspectiva em x e z
+      float[][] pers = {
+        {1, 0, 0, 1.0/width},
+        {0, 1, 0, 0},
+        {0, 0, 0, 1.0/width},
+        {0, 0, 0, 1},
+      };
+      
+      tempVertices[i] = multMatrix(hPoint, pers)[0];
+    }
+    
+    toCartesian();
+    transformWorld();
+    
+    show();
+  }
   
+  void show() {
+    stroke(0);
+    
     // desenha as linhas do polígono
     for(int i = 0; i < arestas.length; i++) {
       int p1 = arestas[i][0], 
@@ -350,5 +506,37 @@ class Object {
       y += incY;
       point((int)x, (int)y);
     }
+  }
+  
+  float[][] multMatrix(float[][] m1, float[][] m2) {
+    // supoe que as matrizes são multiplicáveis e não vazias
+    if(m1.length == 0 || m1[0].length != m2.length) {
+      float[][] err = {{-1}, {-1}};
+      return err;
+    }
+      
+    float [][] res = new float[m1.length][m2[0].length];
+    for(int i = 0; i < m1.length; i++) {
+      for(int j = 0; j < m2[0].length; j++) {
+        for(int k = 0; k < m2.length; k++) {
+          res[i][j] += m1[i][k] * m2[k][j];
+        }
+      }
+    }
+    return res;
+  }
+  void toCartesian() {
+    float[][] newTemp = new float[tempVertices.length][2];
+    
+    for(int i = 0; i < tempVertices.length; i++) {
+      for(int j = 0; j < 2; j++) {
+        if(tempVertices[i][3] == 0) {
+          continue;
+        }
+        newTemp[i][j] = tempVertices[i][j]/(float)tempVertices[i][3];
+      }
+    }
+    
+    tempVertices = newTemp;
   }
 }

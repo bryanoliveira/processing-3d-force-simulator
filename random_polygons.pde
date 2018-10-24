@@ -1,7 +1,8 @@
 /**
- * Author: Bryan Lincoln
- * Created at: September 30th, 2018
+ * Aluno: Bryan Lincoln
  */
+
+import java.util.Map;
 
 int maxSize = 300;
 int maxVertices = 12;
@@ -9,9 +10,6 @@ int maxVertices = 12;
 void setup() {
   size(640, 360);
   background(255);
-}
-
-void draw() {  
   // escolhe aleatoriamente uma cor RGB para o objeto a ser desenhado e de seu contorno
   color preenchimento = color((int)random(255), (int)random(255), (int)random(255));
   color contorno = color((int)random(255), (int)random(255), (int)random(255));
@@ -29,7 +27,11 @@ void draw() {
     linhas[i][1] = (i + 1) % qtd_vertices;
   }
   
-  desenhaPoligono(pontos, linhas, contorno, ((int)random(2)) == 0, preenchimento);
+  desenhaPoligono(pontos, linhas, contorno, true, preenchimento); // ((int)random(2)) == 0
+}
+
+void draw() {  
+  
 }
 
 void linhaDDA (int xi, int yi, int xf, int yf) {
@@ -66,70 +68,127 @@ void desenhaPoligono(int[][] P, int[][] L, color cor_linha, boolean preenche, co
   stroke(cor_preenchimento);
   // preenche o polígono
   if(preenche) {
-    // tabela de análise
-    float[][] tabela = new float[L.length][4];
-    for(int i = 0; i < L.length; i++) {
-      int [] min;
-      int [] max;
-      if(P[L[i][0]][1] < P[L[i][1]][1]) {
-        min = P[L[i][0]];
-        max = P[L[i][1]];
-      } else {
-        min = P[L[i][1]];
-        max = P[L[i][0]];
-      }
-      tabela[i][0] = min[1]; // ymin
-      tabela[i][1] = max[1]; // ymax
-      tabela[i][2] = min[0]; // x de ymin
-      tabela[i][3] = (max[1] - min[1] == 0 ? 0 : (max[0] - min[0]) / (float)(max[1] - min[1])); // 1/m
+    varredura(P, L);
+  }
+}
+
+void mouseClicked() {
+  color preenchimento = color((int)random(255), (int)random(255), (int)random(255));
+  // semente(preenchimento, color(255), new PVector(pmouseX, pmouseY));
+}
+
+// não funciona - muita recursão
+void semente(color preenchimento, color fundo, PVector seed) {
+  color cursor = get(int(seed.x), int(seed.y));
+  if(cursor == fundo) {
+    stroke(preenchimento);
+    point(seed.x, seed.y);
+    semente(preenchimento, fundo, new PVector(seed.x + 1, seed.y));
+    semente(preenchimento, fundo, new PVector(seed.x - 1, seed.y));
+    semente(preenchimento, fundo, new PVector(seed.x, seed.y + 1));
+    semente(preenchimento, fundo, new PVector(seed.x, seed.y - 1));
+  }
+}
+
+void varredura(int[][] P, int[][] L) {
+  // tabela de análise
+  float[][] tabela = new float[L.length][4];
+  for(int i = 0; i < L.length; i++) {
+    int [] min;
+    int [] max;
+    if(P[L[i][0]][1] < P[L[i][1]][1]) {
+      min = P[L[i][0]];
+      max = P[L[i][1]];
+    } else {
+      min = P[L[i][1]];
+      max = P[L[i][0]];
     }
-    
-    int Ymin = 0, Xmin = 0, Ymax = 0, Xmax = 0;
-    // encontra os extremos da linha de varredura
-    for(int i = 0; i < L.length; i++) {
-      if(tabela[i][0] < Ymin) {
-        Ymin = (int) tabela[i][0];
-      }
-      if(tabela[i][1] > Ymax) {
-        Ymax = (int) tabela[i][1];
-      }
-      if(P[i][0] < Xmin) {
-        Xmin = P[i][0];
-      }
-      if(P[i][0] > Xmax) {
-        Xmax = P[i][0];
-      }
+    tabela[i][0] = min[1]; // ymin
+    tabela[i][1] = max[1]; // ymax
+    tabela[i][2] = min[0]; // x de ymin
+    tabela[i][3] = (max[1] - min[1] == 0 ? 0 : (max[0] - min[0]) / (float)(max[1] - min[1])); // 1/m
+  }
+  
+  int Ymin = 0, Xmin = 0, Ymax = 0, Xmax = 0;
+  // encontra os extremos da linha de varredura
+  for(int i = 0; i < L.length; i++) {
+    if(tabela[i][0] < Ymin) {
+      Ymin = (int) tabela[i][0];
     }
+    if(tabela[i][1] > Ymax) {
+      Ymax = (int) tabela[i][1];
+    }
+    if(P[i][0] < Xmin) {
+      Xmin = P[i][0];
+    }
+    if(P[i][0] > Xmax) {
+      Xmax = P[i][0];
+    }
+  }
+  
+  // pra cada linha de varredura
+  // verifica os X que intersectam
+  for(int i = Ymin; i < Ymax; i++) {
+    println();
+    int [] intersec = {}; // x que intersecta
+    int [][] yIntersec = new int[L.length][2]; // max/min
+    int yIntersecIndex = 0;
     
-    // TODO verificar caso em que linhas se tocam no meio da figura
-    
-    // pra cada linha de varredura
-    for(int i = Ymin; i < Ymax; i++) {
-      // verifica os X que intersectam
-      int [] intersec = {};
-      for(int j = 0; j < L.length; j++) {
-        // se o lado tem um y que corta minha linha de varredura
-        // se i > ymin e i < ymax e ymin != ymax
-        if(i > tabela[j][0] && i < tabela[j][1] && tabela[j][0] != tabela[j][1]) {
-          int x = (int) (tabela[j][3] * (i - tabela[j][0]) + tabela[j][2]);
-          intersec = append(intersec, x);
-        }
-      }
-      intersec = sort(intersec);
-      boolean paint = false;
-      int idx = 0;
-      for(int j = Xmin - 1; j < Xmax; j++) {
-        if(intersec.length == 0)
+    // pra cada vértice
+    for(int j = 0; j < L.length; j++) {
+      // se i > ymin e i < ymax (lado corta linha de varredura)
+      // e ymin != ymax (se não é um lado horizontal)
+      if(i >= tabela[j][0] && i <= tabela[j][1] && tabela[j][0] != tabela[j][1]) {
+        int x = (int) (tabela[j][3] * (i - tabela[j][0]) + tabela[j][2]);
+
+        // se é o vértice de conexão entre dois lados que cortam a linha de varredura, adiciona só um
+        // se os dois pontos sao os maximos ou os minimos, adiciona os dois
+        int indexIntersec = find(intersec, x);
+        // se tem uma interseccao E o y dela eh o max e o i eh o min OU o y dela eh o min e o i eh o max, nao adiciona
+        if(indexIntersec >= 0 && ((yIntersec[indexIntersec][0] == i && i == tabela[j][0]) || (yIntersec[indexIntersec][1] == i && i == tabela[j][1]))) {
+          print("pulei ");
           continue;
-        if(intersec[idx] == j && !(idx < intersec.length - 1 && intersec[idx] == intersec[idx + 1])) {
-          paint = !paint;
-          if(idx < intersec.length - 1)
-            idx++;
         }
-        if(paint) {
-          point(j, i);
-        }
+        
+        
+        print("ponto ");
+        intersec = append(intersec, x);
+        yIntersec[yIntersecIndex][0] = (int) tabela[j][1];
+        yIntersec[yIntersecIndex++][1] = (int) tabela[j][0];
+      }
+    }
+    
+    // prepara para varrer essa linha
+    intersec = sort(intersec);
+    for(int h = 0; h < intersec.length; h++) {
+      print(intersec[h] + ", ");
+    }
+    boolean paint = false;
+    int idx = 0;
+    for(int j = Xmin - 1; j < Xmax; j++) {
+      if(intersec.length == 0)
+        continue;
+      if(intersec[idx] == j && !(idx < intersec.length - 1 && intersec[idx] == intersec[idx + 1])) {
+        paint = !paint;
+        if(idx < intersec.length - 1)
+          idx++;
+      }
+      if(paint) {
+        point(j, i);
       }
     }
   }
+}
+
+int find(int [] vector, int value) {
+  int index = -1;
+  
+  for(int i = 0; i < vector.length; i++) {
+    if(vector[i] == value) {
+      index = i;
+      break;
+    }
+  }
+  
+  return index;
 }
