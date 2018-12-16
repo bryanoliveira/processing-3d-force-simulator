@@ -43,7 +43,7 @@ float[][] cavalier(float[][] vertices) {
       {1, 0, 0, 0},
       {0, 1, 0, 0},
       {0, 0, 0, 0},
-      {cos(angle * PI/180.0) * tempVertices[i][2], -sin(angle * PI/180.0) * tempVertices[i][2], 0, 1},
+      {cos(angle * PI/180.0) * tempVertices[i][2], sin(angle * PI/180.0) * tempVertices[i][2], 0, 1},
     };
     tempVertices[i] = multMatrix(hPoint, mCav)[0];
   }
@@ -68,7 +68,7 @@ float[][] cabinet(float[][] vertices) {
       {1, 0, 0, 0},
       {0, 1, 0, 0},
       {0, 0, 0, 0},
-      {cos(angle * PI/180.0) * tempVertices[i][2] / 2, -sin(angle * PI/180) * tempVertices[i][2] / 2, 0, 1},
+      {cos(angle * PI/180.0) * tempVertices[i][2] / 2, sin(angle * PI/180) * tempVertices[i][2] / 2, 0, 1},
     };
     tempVertices[i] = multMatrix(hPoint, mCav)[0];
   }
@@ -88,9 +88,9 @@ float[][] isometric(float[][] vertices) {
     
     // matriz de projeção isométrica
     float[][] iso = {
-      {cos(45 * PI/180), sin(35.26 * PI/180)*sin(45 * PI/180), 0, 0},
+      {-cos(45 * PI/180), -sin(35.26 * PI/180)*sin(45 * PI/180), 0, 0},
       {0, cos(35.26 * PI/180), 0, 0},
-      {sin(45 * PI/180), -sin(35.26 * PI/180)*cos(45 * PI/180), 0, 0},
+      {-sin(45 * PI/180), sin(35.26 * PI/180)*cos(45 * PI/180), 0, 0},
       {0, 0, 0, 1},
     };
     

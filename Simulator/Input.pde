@@ -67,10 +67,10 @@ void keyRepeat() {
           world.scaleSelected(0.05, 0, 0);
           break;
         case 'r':
-          world.scaleSelected(0, 0, -0.05);
+          world.scaleSelected(0, 0, -0.5);
           break;
         case 'y':
-          world.scaleSelected(0, 0, 0.05);
+          world.scaleSelected(0, 0, 0.5);
           break;
       }
     }

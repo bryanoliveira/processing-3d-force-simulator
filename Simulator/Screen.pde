@@ -46,25 +46,29 @@ class Screen {
   }
   
   void showProjection(int projection) {
+    String projectionName = "(P)rojeção Oblíqua Cavaleira";
+    
     switch(projection) {
       case 1:
-        screen.addLine("(P)rojeção Oblíqua Cabinet", 2, 1);
+        projectionName = "(P)rojeção Oblíqua Cabinet";
         break;
       case 2:
-        screen.addLine("(P)rojeção Ortográfica Isométrica", 2, 1);
+        projectionName = "(P)rojeção Ortográfica Isométrica";
         break;
       case 3:
-        screen.addLine("(P)rojeção Perspectiva Z", 2, 1);
+        projectionName = "(P)rojeção Perspectiva Z";
         break;
       case 4:
-        screen.addLine("(P)rojeção Perspectiva X+Z", 2, 1);
+        projectionName = "(P)rojeção Perspectiva X+Z";
         break;
-      default:
-        screen.addLine("(P)rojeção Oblíqua Cavaleira", 2, 1);
     }
+    
+    textAlign(RIGHT);
+    addText(projectionName, new PVector(width - 2 * defaultPadding, height - (defaultPadding + defaultTextSize)), defaultTextSize, color(130));
+    textAlign(LEFT);
   }
   
   void showFPS() {
-    addText("FPS: " + String.format("%.1f", frameRate), new PVector(2 * defaultPadding, height - (defaultPadding + defaultTextSize)), defaultTextSize, color(100));
+    addText("FPS: " + String.format("%.1f", frameRate), new PVector(2 * defaultPadding, height - (defaultPadding + defaultTextSize)), defaultTextSize, color(130));
   }
 }

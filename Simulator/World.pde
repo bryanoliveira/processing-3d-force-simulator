@@ -177,7 +177,7 @@ class World {
   void cloneSelected() {
     // Clona o objeto selecionado
     
-    if(objects.size() == 0) 
+    if(selectedObject == 0 || objects.size() == 0) 
       return;
 
     Object last = objects.get(selectedObject - 1);
@@ -195,7 +195,7 @@ class World {
   void destroySelected() {
     // Destrói o objeto selecionado
     
-    if(objects.size() == 0) 
+    if(selectedObject == 0 || objects.size() == 0) 
       return;
       
     objects.remove(selectedObject - 1);
@@ -249,5 +249,32 @@ class World {
       return "Camera";
     }
     return objects.get(selectedObject - 1).name;
+  }
+  
+  PVector selectedPosition() {
+    // retorna a posição do objeto selecionado
+    
+    if(objects.size() == 0 || selectedObject == 0) {
+      return this.position;
+    }
+    return objects.get(selectedObject - 1).position;
+  }
+  
+  PVector selectedRotation() {
+    // retorna a rotação do objeto selecionado
+    
+    if(objects.size() == 0 || selectedObject == 0) {
+      return this.rotation;
+    }
+    return objects.get(selectedObject - 1).rotation;
+  }
+  
+  PVector selectedScale() {
+    // retorna a escala do objeto selecionado
+    
+    if(objects.size() == 0 || selectedObject == 0) {
+      return this.scale;
+    }
+    return objects.get(selectedObject - 1).scale;
   }
 }
