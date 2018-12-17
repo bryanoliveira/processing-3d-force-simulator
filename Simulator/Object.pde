@@ -16,10 +16,17 @@ public class Object {
   PVector rotation;
   PVector scale;
   PVector massCenter;
+
+  // componentes
+  ArrayList<ComponentInterface> components = new ArrayList<ComponentInterface>();
   
   
   public Object(String name) {
     this.name = name;
+
+    // adiciona componentes
+    components.add(new Collider(this));
+    components.add(new Physics(this));
   }
   
   
@@ -59,10 +66,7 @@ public class Object {
   public void rescale(PVector delta) {
     scale.add(delta);
   }
-  
-  
-  /**** INTERFACE PARA DESENHO ****/
-  
+
   PVector calcMassCenter() {
     // Calcula o centro de massa de acordo com as posições das faces (a matriz computedVertices já deve ter sido preenchida)
     
@@ -83,6 +87,9 @@ public class Object {
     
     return massCenter;
   }
+  
+  
+  /**** INTERFACE PARA DESENHO ****/
   
   public float[][] getVertices() {
     // Calcula as transformações nos vértices do objeto e os retorna
@@ -147,6 +154,27 @@ public class Object {
     
     return facesToDraw.toArray(new Face[0]);
   }
+  
+  
+  /**** INTERFACE DE ACESSO ****/
+
+  public ComponentInterface getComponent(ComponentInterface type) {
+    for(ComponentInterface component : components) {
+      if(type.getClass().getName() == component.getClass().getName()) {
+        return component;
+      }
+    }
+    return null;
+  }
+
+  public void addComponent(ComponentInterface component) {
+    if(getComponent(component) != null) {
+      return;
+    }
+
+    components.add(component);
+  }
+  
 }
 
 

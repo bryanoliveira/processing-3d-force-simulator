@@ -19,8 +19,8 @@ class World {
  
   
   World() {
-    position = new PVector(0, 0, 0);
-    rotation = new PVector(0, 0, 0);
+    position = new PVector(0, 10, 0);
+    rotation = new PVector(-0.2, 0, 0);
     scale = new PVector(1, 1, 1);
   }
   
@@ -42,9 +42,9 @@ class World {
       object.calcMassCenter();
       
       // roda a física do objeto
-      /*for(int j = 0; j < object.components.size(); j++) {
+      for(int j = 0; j < object.components.size(); j++) {
         object.components.get(j).run();
-      }*/
+      }
     }
   }
   

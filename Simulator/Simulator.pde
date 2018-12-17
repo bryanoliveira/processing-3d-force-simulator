@@ -3,7 +3,8 @@ import java.util.*;
 Screen screen;
 World world;
 PVector[] observer; // observador/câmera
-
+float deltaTime = 0;
+float lastTime = 0;
 
 void setup() {
   size(1280, 720);
@@ -19,12 +20,17 @@ void setup() {
   
   world = new World();
   screen = new Screen();
+
+  lastTime = millis();
   
   load("figure.dat");
 }
 
 
 void draw() {
+  deltaTime = (millis() - lastTime) / 1000;
+  lastTime = millis();
+
   background(77);
   
   // pega inputs
@@ -117,6 +123,13 @@ void load(String fileName) {
     String translationS[] = split(fileLines[cursorPosition++], " ");
     PVector translation = new PVector(Float.parseFloat(translationS[0]), Float.parseFloat(translationS[1]), Float.parseFloat(translationS[2]));
     
+    // lê os atributos da física
+    Physics physics = (Physics) object.getComponent(new Physics(null));
+    if(physics != null) {
+      physics.useGravity = (1 == Integer.parseInt(fileLines[cursorPosition++]));
+      physics.mass = Float.parseFloat(fileLines[cursorPosition++]);
+    }
+
     // inicializa o objeto
     object.init(vertices, edges, translation, rotation, scale, faces);
     // adiciona o objeto ao mundo
