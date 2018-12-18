@@ -15,22 +15,22 @@ void keyRepeat() {
       switch(key) {
         // translação
         case 'w':
-          world.translateSelected(0, 2, 0);
+          world.translateSelected(0, 0.1, 0);
           break;
         case 's':
-          world.translateSelected(0, -2, 0);
+          world.translateSelected(0, -0.1, 0);
           break;
         case 'a':
-          world.translateSelected(-2, 0, 0);
+          world.translateSelected(-0.1, 0, 0);
           break;
         case 'd':
-          world.translateSelected(2, 0, 0);
+          world.translateSelected(0.1, 0, 0);
           break;
         case 'q':
-          world.translateSelected(0, 0, -2);
+          world.translateSelected(0, 0, -0.1);
           break;
         case 'e':
-          world.translateSelected(0, 0, 2);
+          world.translateSelected(0, 0, 0.1);
           break;
           
         // rotação

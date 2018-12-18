@@ -59,7 +59,6 @@ void load(String fileName) {
   
   // lê as dimensões do dispositivo
   String[] worldDimensions = split(fileLines[cursorPosition++], " ");
-  world.init(figureName, new PVector(Integer.parseInt(worldDimensions[0]), Integer.parseInt(worldDimensions[2])), new PVector(Integer.parseInt(worldDimensions[1]), Integer.parseInt(worldDimensions[3])));
   
   int numObjects = Integer.parseInt(fileLines[cursorPosition++]);
   
@@ -135,4 +134,7 @@ void load(String fileName) {
     // adiciona o objeto ao mundo
     world.create(object);
   }
+
+  // inicializa o mundo depois que todos os objetos foram configurados para que a física funcione corretamente
+  world.init(figureName, new PVector(Integer.parseInt(worldDimensions[0]), Integer.parseInt(worldDimensions[2])), new PVector(Integer.parseInt(worldDimensions[1]), Integer.parseInt(worldDimensions[3])));
 }

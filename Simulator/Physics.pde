@@ -14,10 +14,12 @@ public class Physics implements ComponentInterface {
         this.acceleration = new PVector(0, 0, 0);
     }
 
+    public void init() {}
+
     public void run() {
         // calcula o deslocamento do objeto dadas as interações (aplicação das forças)
         // DEVE SER EXECUTADO APÓS TODOS OS COMPONENTES DE FÍSICA
-        
+
         applyAcceleration();
         applyVelocity();
     }

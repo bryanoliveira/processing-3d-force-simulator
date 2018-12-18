@@ -38,6 +38,11 @@ public class Object {
     
     this.vertices = vertices;
     this.edges = arestas;
+
+    // inicializa os componentes
+    for(int i = 0; i < components.size(); i++) {
+      components.get(i).init();
+    }
   }
   public void init(float[][] vertices, int[][] arestas, PVector position) {
     init(vertices, arestas);
@@ -96,11 +101,13 @@ public class Object {
     
     float[][] tempVertices = copyMatrix(vertices, vertices.length, 4);
     
+    // escala
+    tempVertices = scaleMatrix(tempVertices, scale);
+
     // rotaciona
     tempVertices = rotateMatrix(tempVertices, rotation);
     
-    // escala
-    tempVertices = scaleMatrix(tempVertices, scale);
+    
     
     // translada
     tempVertices = translateMatrix(tempVertices, position);

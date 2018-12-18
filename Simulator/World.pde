@@ -16,12 +16,15 @@ class World {
   
   // 0: Cavaleira, 1: Cabinet, 2: Isométrica, 3: Perspectiva em Z, 4: Perspectiva em X e em Z
   int projection = 3;
+
+  GlobalPhysics physics;
  
   
   World() {
     position = new PVector(0, 10, 0);
     rotation = new PVector(-0.2, 0, 0);
     scale = new PVector(1, 1, 1);
+    physics = new GlobalPhysics();
   }
   
   void init(String name, PVector limitMin, PVector limitMax) {
@@ -30,11 +33,16 @@ class World {
     this.name = name;
     this.limitMin = limitMin;
     this.limitMax = limitMax;
+
+    physics.init();
   }
   
   void step() {
     // Roda um passo da simulação do mundo aplicando transformações e física
     
+    // roda a física global
+    physics.run();
+
     for(int i = 0; i < objects.size(); i++) {
       Object object = objects.get(i);
       
@@ -72,11 +80,13 @@ class World {
       Object object = objectsToDraw.get(i);
       
       object.computedVertices = object.getVertices();
-      
+
+      // escala no mundo
+      object.computedVertices = scaleMatrix(object.computedVertices, scale);
+
       // rotaciona no mundo
       object.computedVertices = rotateMatrix(object.computedVertices, rotation);
-      // object.computedVertices no mundo
-      object.computedVertices = scaleMatrix(object.computedVertices, scale);
+    
       // translada no mundo
       object.computedVertices = translateMatrix(object.computedVertices, position);
     }
