@@ -25,6 +25,9 @@ float deltaTime = 0;
 float lastTime = 0;
 
 public void setup() {
+  //size(1280, 720);
+  
+  strokeWeight(2);
   
   
   // um observador pra cada projeção
@@ -41,7 +44,7 @@ public void setup() {
 
   lastTime = millis();
   
-  load("figure.dat");
+  load("figure.1.dat");
 }
 
 
@@ -50,6 +53,8 @@ public void draw() {
   lastTime = millis();
 
   background(77);
+  
+  if(helpPressed) screen.showHelp();
   
   // pega inputs
   keyRepeat();
@@ -204,7 +209,7 @@ public class Collider implements ComponentInterface {
         // recebe um objeto que entrou em colisão e o ponto de origem da força de repulsão
         nextToCollide.add(with);
 
-        physics.acceleration.add(object.position.x - origin.x, object.position.y - origin.y, object.position.z - origin.z);
+        // physics.acceleration.add(object.position.x - origin.x, object.position.y - origin.y, object.position.z - origin.z);
     }
 }
 public interface ComponentInterface {
@@ -427,19 +432,13 @@ public class GlobalPhysics {
     }
 }
 boolean shift = false;
+boolean helpPressed = false;
 
 public void keyRepeat() {
   // Pega teclas pressionadas continuamente
   
   if(keyPressed) {
-    if(key == CODED) {
-      switch(keyCode) {
-        case 112:
-          screen.showHelp();
-          break;
-      }
-    }
-    else {
+    if (key != CODED) {
       switch(key) {
         // translação
         case 'w':
@@ -489,16 +488,16 @@ public void keyRepeat() {
           world.scaleSelected(0, -0.05f, 0);
           break;
         case 'f':
-          world.scaleSelected(-0.05f, 0, 0);
-          break;
-        case 'h':
           world.scaleSelected(0.05f, 0, 0);
           break;
+        case 'h':
+          world.scaleSelected(-0.05f, 0, 0);
+          break;
         case 'r':
-          world.scaleSelected(0, 0, -0.5f);
+          world.scaleSelected(0, 0, 0.05f);
           break;
         case 'y':
-          world.scaleSelected(0, 0, 0.5f);
+          world.scaleSelected(0, 0, -0.05f);
           break;
       }
     }
@@ -530,7 +529,10 @@ public void keyPressed() {
     }
   } else if(keyCode == SHIFT) {
     shift = true;
+  } else if(keyCode == 112) {
+    helpPressed = !helpPressed;
   }
+  
 }
 
 public void keyReleased() {
@@ -587,6 +589,24 @@ public float[][] copyMatrix(float[][] m, int rows, int cols) {
           tempMatrix[i][j] = m[i][j];
         }
         // else tempMatrix[i][j] = 0
+      }
+    }
+  }
+  
+  return tempMatrix;
+}
+
+public int[][] copyMatrix(int[][] m, int rows, int cols) {
+  // Copia uma matriz m para uma nova matriz com dimensões [rows][cols]
+  
+  int[][] tempMatrix = new int[rows][cols];
+  
+  if(m.length > 0) {
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < cols; j++) {
+        if(i < m.length && j < m[0].length) {
+          tempMatrix[i][j] = m[i][j];
+        }
       }
     }
   }
@@ -668,6 +688,7 @@ public class Object {
   String name;
   float[][] vertices;
   int[][] edges;
+  int[] axisColors;
   Face[] faces;
   
   // mundo
@@ -699,8 +720,104 @@ public class Object {
     this.rotation = new PVector(0, 0, 0);
     this.scale = new PVector(1, 1, 1);
     
-    this.vertices = vertices;
-    this.edges = arestas;
+    this.vertices = copyMatrix(vertices, vertices.length+12, vertices[0].length);
+    this.edges = copyMatrix(arestas, arestas.length+9, arestas[0].length);
+   
+    
+    // TODO Pegar tamanho das linhas dos eixos depois do objeto ser inicializado
+
+    // X-Axis
+    this.vertices[vertices.length][0] = 3;
+    this.vertices[vertices.length][1] = 0;
+    this.vertices[vertices.length][2] = 0;
+    
+    this.vertices[vertices.length+1][0] = -3;
+    this.vertices[vertices.length+1][1] = 0;
+    this.vertices[vertices.length+1][2] = 0;
+
+    this.vertices[vertices.length+6][0] = 2.8f;
+    this.vertices[vertices.length+6][1] = 0.2f;
+    this.vertices[vertices.length+6][2] = 0;
+
+    this.vertices[vertices.length+9][0] = 2.8f;
+    this.vertices[vertices.length+9][1] = -0.2f;
+    this.vertices[vertices.length+9][2] = 0;
+    
+    // Y-Axis
+    this.vertices[vertices.length+2][0] = 0;
+    this.vertices[vertices.length+2][1] = 3;
+    this.vertices[vertices.length+2][2] = 0;
+    
+    this.vertices[vertices.length+3][0] = 0;
+    this.vertices[vertices.length+3][1] = -3;
+    this.vertices[vertices.length+3][2] = 0;
+
+    this.vertices[vertices.length+7][0] = 0.2f;
+    this.vertices[vertices.length+7][1] = 2.8f;
+    this.vertices[vertices.length+7][2] = 0;
+
+    this.vertices[vertices.length+10][0] = -0.2f;
+    this.vertices[vertices.length+10][1] = 2.8f;
+    this.vertices[vertices.length+10][2] = 0;
+    
+    // Z-Axis
+    this.vertices[vertices.length+4][0] = 0;
+    this.vertices[vertices.length+4][1] = 0;
+    this.vertices[vertices.length+4][2] = 3;
+    
+    this.vertices[vertices.length+5][0] = 0;
+    this.vertices[vertices.length+5][1] = 0;
+    this.vertices[vertices.length+5][2] = -3;
+
+    this.vertices[vertices.length+8][0] = 0.2f;
+    this.vertices[vertices.length+8][1] = 0;
+    this.vertices[vertices.length+8][2] = 2.8f;
+
+    this.vertices[vertices.length+11][0] = -0.2f;
+    this.vertices[vertices.length+11][1] = 0;
+    this.vertices[vertices.length+11][2] = 2.8f;
+    
+    
+    
+    // Axis lines **************
+    // X
+    this.edges[arestas.length][0] = vertices.length;
+    this.edges[arestas.length][1] = vertices.length+1;
+
+    this.edges[arestas.length+3][0] = vertices.length;
+    this.edges[arestas.length+3][1] = vertices.length+6;
+
+    this.edges[arestas.length+6][0] = vertices.length;
+    this.edges[arestas.length+6][1] = vertices.length+9;
+    
+    // Y 
+    this.edges[arestas.length+1][0] = vertices.length+2;
+    this.edges[arestas.length+1][1] = vertices.length+3;
+
+    this.edges[arestas.length+4][0] = vertices.length+2;
+    this.edges[arestas.length+4][1] = vertices.length+7;
+
+    this.edges[arestas.length+7][0] = vertices.length+2;
+    this.edges[arestas.length+7][1] = vertices.length+10;
+    
+    // Z
+    this.edges[arestas.length+2][0] = vertices.length+4;
+    this.edges[arestas.length+2][1] = vertices.length+5;
+
+    this.edges[arestas.length+5][0] = vertices.length+4;
+    this.edges[arestas.length+5][1] = vertices.length+8;
+
+    this.edges[arestas.length+8][0] = vertices.length+4;
+    this.edges[arestas.length+8][1] = vertices.length+11;
+
+
+       
+    // Axis colors
+    this.axisColors = new int[3];
+    this.axisColors[0] = color(255, 0, 0);
+    this.axisColors[1] = color(0, 255, 0);
+    this.axisColors[2] = color(0, 0, 255);
+
 
     // inicializa os componentes
     for(int i = 0; i < components.size(); i++) {
@@ -781,6 +898,12 @@ public class Object {
     // Pode fazer algum cálculo adicional aqui
     
     return edges;
+  }
+
+  public int[] getAxisColors() {
+    // Retorna as cores das linhas que representam os eixos XYZ
+
+    return axisColors;
   }
   
   public Face[] getFaces() {
@@ -933,10 +1056,8 @@ public class Physics implements ComponentInterface {
 }
 // Polígonos e desenho
 
-public void DDALine(int xi, int yi, int xf, int yf) {  
+public void DDALine(int xi, int yi, int xf, int yf, int colour) {  
   // Desenha na tela uma linha de Pi a Pf
-  
-  strokeWeight(2);
   
   int dx = xf - xi, dy = yf - yi, steps = abs(dx);
   
@@ -950,13 +1071,14 @@ public void DDALine(int xi, int yi, int xf, int yf) {
     x += incX;
     y += incY;point((int)x, (int)y);
   }
+
+  stroke(colour);
   point((int)x, (int)y);
 }
 
 public void fillPolygon(float[][] vertices, int[][] edges, int colour) {
   // Preenche um polígono dado com uma cor dada (lento)
-  
-  stroke(colour);
+
   strokeWeight(1);
   
   // tabela de análise
@@ -1025,8 +1147,9 @@ public void fillPolygon(float[][] vertices, int[][] edges, int colour) {
     // prepara para varrer essa linha
     intersec = sort(intersec);
 
+    stroke(colour);
     for(int j = 0; j < intersec.length; j += 2) {
-      DDALine(intersec[j], i, intersec[j + 1] - 3, i); // deixa um espaço na linha sem desenhar pra borda do objeto ser exibida
+      line(intersec[j], i, intersec[j + 1] - 3, i); // deixa um espaço na linha sem desenhar pra borda do objeto ser exibida
     }
   }
 }
@@ -1223,13 +1346,13 @@ class Screen {
   }
   
   public void showHelp() {
-    int offset = 4;
+    int offset = 6;
     addLine("Help", offset++, 1);
     addLine("(Shift+)TAB: Seleciona objetos", offset++, 2);
     addLine("ad: Translação em X", offset++, 2);
     addLine("ws: Translação em Y", offset++, 2);
     addLine("qe: Translação em Z", offset++, 2);
-    addLine("fg: Escala em X", offset++, 2);
+    addLine("fh: Escala em X", offset++, 2);
     addLine("tg: Escala em Y", offset++, 2);
     addLine("ry: Escala em Z", offset++, 2);
     addLine("jl: Rotação em X", offset++, 2);
@@ -1331,10 +1454,10 @@ class World {
     // destaca que o mundo está selecionado
     if(selectedObject == 0) {
       stroke(255);
-      DDALine(0, 0, width - 1, 0);
-      DDALine(0, 0, 0, height - 1);
-      DDALine(width - 1, 0, width - 1, height - 1);
-      DDALine(0, height - 1, width - 1, height - 1);
+      line(0, 0, width - 1, 0);
+      line(0, 0, 0, height - 1);
+      line(width - 1, 0, width - 1, height - 1);
+      line(0, height - 1, width - 1, height - 1);
     }
     
     ArrayList<Object> objectsToDraw = new ArrayList<Object>();
@@ -1391,28 +1514,31 @@ class World {
       computedVertices = adjustDevice(computedVertices, limitMin, limitMax);
       
       if(selectedObject == object.index) {
-        stroke(255);
+        strokeWeight(4);
       } else {
-        stroke(140);
+        strokeWeight(2);
       }
       
-      drawObject(computedVertices, object.getEdges(), faces);
+      drawObject(computedVertices, object.getEdges(), object.getAxisColors(), faces);
     }
   }
   
-  public void drawObject(float[][] vertices, int[][] edges, Face[] faces) {
+  public void drawObject(float[][] vertices, int[][] edges, int[] axisColors, Face[] faces) {
     // Desenha um objeto e suas faces, se tiver
     
     // desenha as linhas do polígono
-    for(int i = 0; i < edges.length; i++) {
+    for(int i = 0; i < edges.length-9; i++) {
       int p1 = edges[i][0],
           p2 = edges[i][1],
           xi = PApplet.parseInt(vertices[p1][0]),
           yi = PApplet.parseInt(vertices[p1][1]),
           xf = PApplet.parseInt(vertices[p2][0]),
           yf = PApplet.parseInt(vertices[p2][1]);
-          
-      DDALine(xi, yi, xf, yf);
+          vertex(xi, yi);
+          vertex(xf, yf);
+
+      stroke(255);
+      line(xi, yi, xf, yf);
     }
     
     if(faces != null) {
@@ -1434,6 +1560,22 @@ class World {
         }
       }
     }
+
+    // Desenha as linhas dos eixos XYZ
+    for(int i = edges.length-9; i < edges.length; i++) {
+      int p1 = edges[i][0],
+          p2 = edges[i][1],
+          xi = PApplet.parseInt(vertices[p1][0]),
+          yi = PApplet.parseInt(vertices[p1][1]),
+          xf = PApplet.parseInt(vertices[p2][0]),
+          yf = PApplet.parseInt(vertices[p2][1]);
+          
+      strokeWeight(2);
+      stroke(axisColors[abs(edges.length-9 - i)%3]);
+      line(xi, yi, xf, yf);
+    }
+    noStroke();
+
   }
   
   public void circleProjection(int step) {
@@ -1557,7 +1699,7 @@ class World {
     return objects.get(selectedObject - 1).scale;
   }
 }
-  public void settings() {  size(1280, 720); }
+  public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Simulator" };
     if (passedArgs != null) {

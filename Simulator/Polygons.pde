@@ -1,9 +1,7 @@
 // Polígonos e desenho
 
-void DDALine(int xi, int yi, int xf, int yf) {  
+void DDALine(int xi, int yi, int xf, int yf, color colour) {  
   // Desenha na tela uma linha de Pi a Pf
-  
-  strokeWeight(2);
   
   int dx = xf - xi, dy = yf - yi, steps = abs(dx);
   
@@ -17,13 +15,14 @@ void DDALine(int xi, int yi, int xf, int yf) {
     x += incX;
     y += incY;point((int)x, (int)y);
   }
+
+  stroke(colour);
   point((int)x, (int)y);
 }
 
 void fillPolygon(float[][] vertices, int[][] edges, color colour) {
   // Preenche um polígono dado com uma cor dada (lento)
-  
-  stroke(colour);
+
   strokeWeight(1);
   
   // tabela de análise
@@ -92,8 +91,9 @@ void fillPolygon(float[][] vertices, int[][] edges, color colour) {
     // prepara para varrer essa linha
     intersec = sort(intersec);
 
+    stroke(colour);
     for(int j = 0; j < intersec.length; j += 2) {
-      DDALine(intersec[j], i, intersec[j + 1] - 3, i); // deixa um espaço na linha sem desenhar pra borda do objeto ser exibida
+      line(intersec[j], i, intersec[j + 1] - 3, i); // deixa um espaço na linha sem desenhar pra borda do objeto ser exibida
     }
   }
 }

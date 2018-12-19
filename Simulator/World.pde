@@ -62,10 +62,10 @@ class World {
     // destaca que o mundo está selecionado
     if(selectedObject == 0) {
       stroke(255);
-      DDALine(0, 0, width - 1, 0);
-      DDALine(0, 0, 0, height - 1);
-      DDALine(width - 1, 0, width - 1, height - 1);
-      DDALine(0, height - 1, width - 1, height - 1);
+      line(0, 0, width - 1, 0);
+      line(0, 0, 0, height - 1);
+      line(width - 1, 0, width - 1, height - 1);
+      line(0, height - 1, width - 1, height - 1);
     }
     
     ArrayList<Object> objectsToDraw = new ArrayList<Object>();
@@ -122,28 +122,31 @@ class World {
       computedVertices = adjustDevice(computedVertices, limitMin, limitMax);
       
       if(selectedObject == object.index) {
-        stroke(255);
+        strokeWeight(4);
       } else {
-        stroke(140);
+        strokeWeight(2);
       }
       
-      drawObject(computedVertices, object.getEdges(), faces);
+      drawObject(computedVertices, object.getEdges(), object.getAxisColors(), faces);
     }
   }
   
-  void drawObject(float[][] vertices, int[][] edges, Face[] faces) {
+  void drawObject(float[][] vertices, int[][] edges, color[] axisColors, Face[] faces) {
     // Desenha um objeto e suas faces, se tiver
     
     // desenha as linhas do polígono
-    for(int i = 0; i < edges.length; i++) {
+    for(int i = 0; i < edges.length-9; i++) {
       int p1 = edges[i][0],
           p2 = edges[i][1],
           xi = int(vertices[p1][0]),
           yi = int(vertices[p1][1]),
           xf = int(vertices[p2][0]),
           yf = int(vertices[p2][1]);
-          
-      DDALine(xi, yi, xf, yf);
+          vertex(xi, yi);
+          vertex(xf, yf);
+
+      stroke(255);
+      line(xi, yi, xf, yf);
     }
     
     if(faces != null) {
@@ -165,6 +168,22 @@ class World {
         }
       }
     }
+
+    // Desenha as linhas dos eixos XYZ
+    for(int i = edges.length-9; i < edges.length; i++) {
+      int p1 = edges[i][0],
+          p2 = edges[i][1],
+          xi = int(vertices[p1][0]),
+          yi = int(vertices[p1][1]),
+          xf = int(vertices[p2][0]),
+          yf = int(vertices[p2][1]);
+          
+      strokeWeight(2);
+      stroke(axisColors[abs(edges.length-9 - i)%3]);
+      line(xi, yi, xf, yf);
+    }
+    noStroke();
+
   }
   
   void circleProjection(int step) {
