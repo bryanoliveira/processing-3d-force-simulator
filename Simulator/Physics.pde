@@ -5,6 +5,8 @@ public class Physics implements ComponentInterface {
     PVector acceleration;
     float mass = 10;
 
+
+
     boolean useGravity = true;
 
     public Physics(Object object) {
@@ -22,6 +24,8 @@ public class Physics implements ComponentInterface {
 
         applyAcceleration();
         applyVelocity();
+
+        acceleration.mult(0); // zera a aceleração
     }
 
     private void applyAcceleration() {

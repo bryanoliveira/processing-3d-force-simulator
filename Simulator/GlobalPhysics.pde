@@ -28,11 +28,12 @@ public class GlobalPhysics {
     public void run() {
         // calcula a física do mundo
 
-        setCollisions();
+        localCollisions(globalCollisions());
     }
 
-    private void setCollisions() {
+    private ArrayList<Limit[]> globalCollisions() {
         // busca intersecções globais entre os objetos em X, Y e Z (nessa ordem, mas pode ser otimizado usando a variância da distribuição)
+        // TODO esse método pode ser melhorado, o procedimento de intersecção é O(n²)
 
         // encontra os limites dos objetos na reta cartesiana
         ArrayList<Limit> limitsX = new ArrayList<Limit>();
@@ -59,7 +60,7 @@ public class GlobalPhysics {
         // analiza a lista de colisão em X
         for(int i = 0; i < limitsX.size() - 1; i++) {
             Limit l1 = limitsX.get(i);
-
+ 
             for(int j = i + 1; j < limitsX.size(); j++) {
                 Limit l2 = limitsX.get(i + 1);
             
@@ -100,13 +101,101 @@ public class GlobalPhysics {
 
         collisionsX = intersection(collisionsX, collisionsY);
         collisionsX = intersection(collisionsX, collisionsZ);
+        return collisionsX;
+    }
 
-        for(int i = 0; i < collisionsX.size(); i++) {
-            println("Colisao (" + millis() + "): " + collisionsX.get(i)[0].object.name + ", " + collisionsX.get(i)[1].object.name);
+    private void localCollisions(ArrayList<Limit[]> potentialCollisions) {
+        // verifica se as potenciais colisões são realmente colisões e informa os envolvidos
+        /* Pra cada face do primeiro polígono, verifica se o produto vetorial entre sua normal e 
+         * cada vértice do segundo polígono é maior que zero. Se sim, não há colisão.
+         * Adicione todos os vértices que geram um produto <= 0 em um vetor auxiliar, removendo os que
+         * eventualmente geram um valor > 0 com alguma face. 
+         * Os pontos que sobrarem representam a magnitude da colisão.
+         */
+
+        // para cada potencial colisão
+        for(int i = 0; i < potentialCollisions.size(); i++) {
+            Limit[] collision = potentialCollisions.get(i);
+            Object obj1 = collision[0].object;
+            Object obj2 = collision[1].object;
+
+            // aplica transformações nos vértices
+            obj1.computedVertices = obj1.getVertices(); 
+            obj2.computedVertices = obj2.getVertices(); 
+
+            // calcula a normal das faces
+            obj1.getFaces();
+            obj2.getFaces();
+
+            // pega os vertices de intersecção entre os objetos
+
+            ArrayList<float[]> intersectionPoints = new ArrayList<float[]>();
+
+            // começa com os pontos do segundo objeto que estão dentro do primeiro
+            // pra cada vértice do segundo objeto
+            for(int j = 0; j < obj2.vertices.length; j++) {
+                boolean outside = false;
+                // pra cada face do primeiro objeto
+                for(int k = 0; k < obj1.faces.length; k++) {
+                    PVector P2 = new PVector(obj1.computedVertices[obj1.faces[k].vertices[1]][0],
+                                             obj1.computedVertices[obj1.faces[k].vertices[1]][1],
+                                             obj1.computedVertices[obj1.faces[k].vertices[1]][2]);
+
+                    // produto vetorial entre a normal da face k e a diferença entre o vértice j e um vértice da face
+                    float prod = obj1.faces[k].normal.x * (obj2.computedVertices[j][0] - P2.x) +
+                                 obj1.faces[k].normal.y * (obj2.computedVertices[j][1] - P2.y) +
+                                 obj1.faces[k].normal.z * (obj2.computedVertices[j][2] - P2.z);
+
+                    if(prod > 0) outside = true;
+                }
+
+                if(!outside) {
+                    intersectionPoints.add(obj2.computedVertices[j]);
+                }
+            }
+
+            // pega os pontos do primeiro objeto que estão dentro do segundo
+            // pra cada vértice do primeiro objeto
+            for(int j = 0; j < obj1.vertices.length; j++) {
+                boolean outside = false;
+                // pra cada face do segundo objeto
+                for(int k = 0; k < obj2.faces.length; k++) {
+                    PVector P2 = new PVector(obj2.computedVertices[obj2.faces[k].vertices[1]][0], 
+                                             obj2.computedVertices[obj2.faces[k].vertices[1]][1], 
+                                             obj2.computedVertices[obj2.faces[k].vertices[1]][2]);
+
+                    // produto vetorial entre a normal da face k e a diferença entre o vértice j e um vértice da face
+                    float prod = obj2.faces[k].normal.x * (obj1.computedVertices[j][0] - P2.x) +
+                                 obj2.faces[k].normal.y * (obj1.computedVertices[j][1] - P2.y) +
+                                 obj2.faces[k].normal.z * (obj1.computedVertices[j][2] - P2.z);
+
+                    if(prod > 0) outside = true;
+                }
+
+                if(!outside) {
+                    intersectionPoints.add(obj1.computedVertices[j]);
+                }
+            }
+
+            // se houve intersecção, houve colisão
+            if(intersectionPoints.size() > 0) {
+                // faz a média entre os pontos de intersecção - esse vai ser o ponto de origem das forças de reação
+                PVector collisionOrigin = new PVector(0, 0, 0);
+                for(int j = 0; j < intersectionPoints.size(); j++) {
+                    collisionOrigin.x += intersectionPoints.get(i)[0];
+                    collisionOrigin.y += intersectionPoints.get(i)[1];
+                    collisionOrigin.z += intersectionPoints.get(i)[2];
+                }
+                collisionOrigin.div(intersectionPoints.size());
+
+                // avisa os objetos da colisão
+                ((Collider) obj1.getComponent(new Collider(null))).setCollision(obj2, collisionOrigin);
+                ((Collider) obj2.getComponent(new Collider(null))).setCollision(obj1, collisionOrigin);
+            }
         }
     }
 
-    ArrayList<Limit[]> intersection(ArrayList<Limit[]> l1, ArrayList<Limit[]> l2) {
+    private ArrayList<Limit[]> intersection(ArrayList<Limit[]> l1, ArrayList<Limit[]> l2) {
         ArrayList<Limit[]> list = new ArrayList<Limit[]>();
 
         for (Limit[] limit : l1) {
