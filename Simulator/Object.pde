@@ -38,6 +38,11 @@ public class Object {
     
     this.vertices = vertices;
     this.edges = arestas;
+
+    // inicializa os componentes
+    for(int i = 0; i < components.size(); i++) {
+      components.get(i).init();
+    }
   }
   public void init(float[][] vertices, int[][] arestas, PVector position) {
     init(vertices, arestas);
@@ -96,11 +101,11 @@ public class Object {
     
     float[][] tempVertices = copyMatrix(vertices, vertices.length, 4);
     
-    // rotaciona
-    tempVertices = rotateMatrix(tempVertices, rotation);
-    
     // escala
     tempVertices = scaleMatrix(tempVertices, scale);
+
+    // rotaciona
+    tempVertices = rotateMatrix(tempVertices, rotation);
     
     // translada
     tempVertices = translateMatrix(tempVertices, position);
@@ -126,10 +131,10 @@ public class Object {
       PVector P1 = new PVector(computedVertices[faces[i].vertices[0]][0], computedVertices[faces[i].vertices[0]][1], computedVertices[faces[i].vertices[0]][2]);
       PVector P2 = new PVector(computedVertices[faces[i].vertices[1]][0], computedVertices[faces[i].vertices[1]][1], computedVertices[faces[i].vertices[1]][2]);
       PVector P3 = new PVector(computedVertices[faces[i].vertices[2]][0], computedVertices[faces[i].vertices[2]][1], computedVertices[faces[i].vertices[2]][2]);
-      PVector normal = new PVector((P3.y - P2.y) * (P1.z - P2.z) - (P1.y - P2.y) * (P3.z - P2.z), 
+      faces[i].normal = new PVector((P3.y - P2.y) * (P1.z - P2.z) - (P1.y - P2.y) * (P3.z - P2.z), 
                                    (P3.z - P2.z) * (P1.x - P2.x) - (P1.z - P2.z) * (P3.x - P2.x), 
                                    (P3.x - P2.x) * (P1.y - P2.y) - (P1.x - P2.x) * (P3.y - P2.y));
-      float prod = normal.x * (observer[world.projection].x - P2.x) + normal.y * (observer[world.projection].y - P2.y) + normal.z * (observer[world.projection].z - P2.z);
+      float prod = faces[i].normal.x * (observer[world.projection].x - P2.x) + faces[i].normal.y * (observer[world.projection].y - P2.y) + faces[i].normal.z * (observer[world.projection].z - P2.z);
       
       if(prod < 0) {
         continue;
@@ -197,6 +202,7 @@ public class Face implements Comparable<Face> {
   int[] vertices;
   color colour;
   float distance = 0;
+  PVector normal = new PVector(0, 0, 0);
   
   
   public Face(int[] vertices, color colour) {
