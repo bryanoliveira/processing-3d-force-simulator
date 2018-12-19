@@ -1,17 +1,11 @@
 boolean shift = false;
+boolean helpPressed = false;
 
 void keyRepeat() {
   // Pega teclas pressionadas continuamente
   
   if(keyPressed) {
-    if(key == CODED) {
-      switch(keyCode) {
-        case 112:
-          screen.showHelp();
-          break;
-      }
-    }
-    else {
+    if (key != CODED) {
       switch(key) {
         // translação
         case 'w':
@@ -61,16 +55,16 @@ void keyRepeat() {
           world.scaleSelected(0, -0.05, 0);
           break;
         case 'f':
-          world.scaleSelected(-0.05, 0, 0);
-          break;
-        case 'h':
           world.scaleSelected(0.05, 0, 0);
           break;
+        case 'h':
+          world.scaleSelected(-0.05, 0, 0);
+          break;
         case 'r':
-          world.scaleSelected(0, 0, -0.5);
+          world.scaleSelected(0, 0, 0.05);
           break;
         case 'y':
-          world.scaleSelected(0, 0, 0.5);
+          world.scaleSelected(0, 0, -0.05);
           break;
       }
     }
@@ -102,7 +96,10 @@ void keyPressed() {
     }
   } else if(keyCode == SHIFT) {
     shift = true;
+  } else if(keyCode == 112) {
+    helpPressed = !helpPressed;
   }
+  
 }
 
 void keyReleased() {

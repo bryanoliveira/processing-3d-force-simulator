@@ -5,6 +5,7 @@ public class Object {
   String name;
   float[][] vertices;
   int[][] edges;
+  color[] axisColors;
   Face[] faces;
   
   // mundo
@@ -36,8 +37,97 @@ public class Object {
     this.rotation = new PVector(0, 0, 0);
     this.scale = new PVector(1, 1, 1);
     
-    this.vertices = vertices;
-    this.edges = arestas;
+    this.vertices = copyMatrix(vertices, vertices.length+12, vertices[0].length);
+    this.edges = copyMatrix(arestas, arestas.length+9, arestas[0].length);
+   
+    
+    // TODO Pegar tamanho das linhas dos eixos depois do objeto ser inicializado
+
+    // X-Axis
+    this.vertices[vertices.length][0] = 3;
+    this.vertices[vertices.length][1] = 0;
+    this.vertices[vertices.length][2] = 0;
+    
+    this.vertices[vertices.length+1][0] = -3;
+    this.vertices[vertices.length+1][1] = 0;
+    this.vertices[vertices.length+1][2] = 0;
+
+    this.vertices[vertices.length+6][0] = 2.8;
+    this.vertices[vertices.length+6][1] = 0.2;
+    this.vertices[vertices.length+6][2] = 0;
+
+    this.vertices[vertices.length+9][0] = 2.8;
+    this.vertices[vertices.length+9][1] = -0.2;
+    this.vertices[vertices.length+9][2] = 0;
+
+    this.edges[arestas.length][0] = vertices.length;
+    this.edges[arestas.length][1] = vertices.length+1;
+
+    this.edges[arestas.length+3][0] = vertices.length;
+    this.edges[arestas.length+3][1] = vertices.length+6;
+
+    this.edges[arestas.length+6][0] = vertices.length;
+    this.edges[arestas.length+6][1] = vertices.length+9;
+    
+    // Y-Axis
+    this.vertices[vertices.length+2][0] = 0;
+    this.vertices[vertices.length+2][1] = 3;
+    this.vertices[vertices.length+2][2] = 0;
+    
+    this.vertices[vertices.length+3][0] = 0;
+    this.vertices[vertices.length+3][1] = -3;
+    this.vertices[vertices.length+3][2] = 0;
+
+    this.vertices[vertices.length+7][0] = 0.2;
+    this.vertices[vertices.length+7][1] = 2.8;
+    this.vertices[vertices.length+7][2] = 0;
+
+    this.vertices[vertices.length+10][0] = -0.2;
+    this.vertices[vertices.length+10][1] = 2.8;
+    this.vertices[vertices.length+10][2] = 0;
+
+    this.edges[arestas.length+1][0] = vertices.length+2;
+    this.edges[arestas.length+1][1] = vertices.length+3;
+
+    this.edges[arestas.length+4][0] = vertices.length+2;
+    this.edges[arestas.length+4][1] = vertices.length+7;
+
+    this.edges[arestas.length+7][0] = vertices.length+2;
+    this.edges[arestas.length+7][1] = vertices.length+10;
+    
+    // Z-Axis
+    this.vertices[vertices.length+4][0] = 0;
+    this.vertices[vertices.length+4][1] = 0;
+    this.vertices[vertices.length+4][2] = 3;
+    
+    this.vertices[vertices.length+5][0] = 0;
+    this.vertices[vertices.length+5][1] = 0;
+    this.vertices[vertices.length+5][2] = -3;
+
+    this.vertices[vertices.length+8][0] = 0.2;
+    this.vertices[vertices.length+8][1] = 0;
+    this.vertices[vertices.length+8][2] = 2.8;
+
+    this.vertices[vertices.length+11][0] = -0.2;
+    this.vertices[vertices.length+11][1] = 0;
+    this.vertices[vertices.length+11][2] = 2.8;
+
+    this.edges[arestas.length+2][0] = vertices.length+4;
+    this.edges[arestas.length+2][1] = vertices.length+5;
+
+    this.edges[arestas.length+5][0] = vertices.length+4;
+    this.edges[arestas.length+5][1] = vertices.length+8;
+
+    this.edges[arestas.length+8][0] = vertices.length+4;
+    this.edges[arestas.length+8][1] = vertices.length+11;
+    
+    
+    // Axis colors
+    this.axisColors = new color[3];
+    this.axisColors[0] = color(255, 0, 0);
+    this.axisColors[1] = color(0, 255, 0);
+    this.axisColors[2] = color(0, 0, 255);
+
 
     // inicializa os componentes
     for(int i = 0; i < components.size(); i++) {
@@ -118,6 +208,12 @@ public class Object {
     // Pode fazer algum cálculo adicional aqui
     
     return edges;
+  }
+
+  public color[] getAxisColors() {
+    // Retorna as cores das linhas que representam os eixos XYZ
+
+    return axisColors;
   }
   
   public Face[] getFaces() {

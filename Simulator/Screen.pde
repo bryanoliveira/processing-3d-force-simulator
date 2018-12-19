@@ -28,13 +28,13 @@ class Screen {
   }
   
   void showHelp() {
-    int offset = 4;
+    int offset = 6;
     addLine("Help", offset++, 1);
     addLine("(Shift+)TAB: Seleciona objetos", offset++, 2);
     addLine("ad: Translação em X", offset++, 2);
     addLine("ws: Translação em Y", offset++, 2);
     addLine("qe: Translação em Z", offset++, 2);
-    addLine("fg: Escala em X", offset++, 2);
+    addLine("fh: Escala em X", offset++, 2);
     addLine("tg: Escala em Y", offset++, 2);
     addLine("ry: Escala em Z", offset++, 2);
     addLine("jl: Rotação em X", offset++, 2);
@@ -42,7 +42,7 @@ class Screen {
     addLine("uo: Rotação em Z", offset++, 2);
     addLine(",: Clona o objeto selecionado", offset++, 2);
     addLine(".: Destrói o objeto selecionado", offset++, 2);
-    addLine("b: Alterna algoritmo de preenchimento", offset++, 2);
+    addLine("b: Preenchimento (" + (world.useScanLine?"ScanLine)":"Processing)"), offset++, 2);
   }
   
   void showProjection(int projection) {

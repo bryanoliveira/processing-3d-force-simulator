@@ -7,7 +7,10 @@ float deltaTime = 0;
 float lastTime = 0;
 
 void setup() {
-  size(1280, 720);
+  //size(1280, 720);
+  fullScreen();
+  strokeWeight(2);
+  
   
   // um observador pra cada projeção
   // TODO isso pode ser tunado melhor
@@ -23,7 +26,7 @@ void setup() {
 
   lastTime = millis();
   
-  load("figure.dat");
+  load("figure.1.dat");
 }
 
 
@@ -32,6 +35,8 @@ void draw() {
   lastTime = millis();
 
   background(77);
+  
+  if(helpPressed) screen.showHelp();
   
   // pega inputs
   keyRepeat();

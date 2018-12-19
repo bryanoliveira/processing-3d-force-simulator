@@ -12,7 +12,7 @@ class World {
   ArrayList<Object> objects = new ArrayList<Object>();
   int selectedObject = 0; // 0: Camera
   
-  boolean useScanLine = false; // usar algoritmo de preenchimento scanline ou o do processing?
+  boolean useScanLine = true; // usar algoritmo de preenchimento scanline ou o do processing?
   
   // 0: Cavaleira, 1: Cabinet, 2: Isométrica, 3: Perspectiva em Z, 4: Perspectiva em X e em Z
   int projection = 3;
@@ -62,10 +62,10 @@ class World {
     // destaca que o mundo está selecionado
     if(selectedObject == 0) {
       stroke(255);
-      DDALine(0, 0, width - 1, 0);
-      DDALine(0, 0, 0, height - 1);
-      DDALine(width - 1, 0, width - 1, height - 1);
-      DDALine(0, height - 1, width - 1, height - 1);
+      line(0, 0, width - 1, 0);
+      line(0, 0, 0, height - 1);
+      line(width - 1, 0, width - 1, height - 1);
+      line(0, height - 1, width - 1, height - 1);
     }
     
     ArrayList<Object> objectsToDraw = new ArrayList<Object>();
@@ -120,32 +120,15 @@ class World {
       }
       
       computedVertices = adjustDevice(computedVertices, limitMin, limitMax);
-      
-      if(selectedObject == object.index) {
-        stroke(255);
-      } else {
-        stroke(140);
-      }
-      
-      drawObject(computedVertices, object.getEdges(), faces);
+      boolean select = (selectedObject == object.index)?true:false;  
+      drawObject(select, computedVertices, object.getEdges(), object.getAxisColors(), faces);
     }
   }
   
-  void drawObject(float[][] vertices, int[][] edges, Face[] faces) {
+  void drawObject(boolean select, float[][] vertices, int[][] edges, color[] axisColors, Face[] faces) {
     // Desenha um objeto e suas faces, se tiver
     
-    // desenha as linhas do polígono
-    for(int i = 0; i < edges.length; i++) {
-      int p1 = edges[i][0],
-          p2 = edges[i][1],
-          xi = int(vertices[p1][0]),
-          yi = int(vertices[p1][1]),
-          xf = int(vertices[p2][0]),
-          yf = int(vertices[p2][1]);
-          
-      DDALine(xi, yi, xf, yf);
-    }
-    
+    // Se tiver faces, pinta as faces visiveis 
     if(faces != null) {
       for(int i = 0; i < faces.length; i++) {
         if(useScanLine) {
@@ -164,7 +147,44 @@ class World {
           endShape(CLOSE);
         }
       }
+
+
+      // Desenha as linhas das faces visiveis
+      stroke(255);
+      strokeWeight(select?4:2);    
+
+      for(int i = 0; i < faces.length; i++) {
+        float[][] faceVertices = new float[faces[i].vertices.length][2];
+        for(int j = 0; j < faces[i].vertices.length; j++) {
+          faceVertices[j][0] = vertices[faces[i].vertices[j]][0];
+          faceVertices[j][1] = vertices[faces[i].vertices[j]][1];
+        }
+
+        for(int j = 0; j < faceVertices.length; j++) {
+          if (j == faceVertices.length-1) {
+            line(faceVertices[j][0], faceVertices[j][1], faceVertices[0][0], faceVertices[0][1]);  
+          } else {
+            line(faceVertices[j][0], faceVertices[j][1], faceVertices[j+1][0], faceVertices[j+1][1]);
+          }
+        }
+      }      
+    } 
+
+    // Desenha as linhas dos eixos XYZ
+    strokeWeight(2);
+    for(int i = edges.length-9; i < edges.length; i++) {
+      int p1 = edges[i][0],
+          p2 = edges[i][1],
+          xi = int(vertices[p1][0]),
+          yi = int(vertices[p1][1]),
+          xf = int(vertices[p2][0]),
+          yf = int(vertices[p2][1]);
+        
+      stroke(axisColors[abs(edges.length-9 - i)%3]);
+      line(xi, yi, xf, yf);
     }
+    noStroke();
+
   }
   
   void circleProjection(int step) {

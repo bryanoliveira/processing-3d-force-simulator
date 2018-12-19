@@ -54,6 +54,24 @@ float[][] copyMatrix(float[][] m, int rows, int cols) {
   return tempMatrix;
 }
 
+int[][] copyMatrix(int[][] m, int rows, int cols) {
+  // Copia uma matriz m para uma nova matriz com dimensões [rows][cols]
+  
+  int[][] tempMatrix = new int[rows][cols];
+  
+  if(m.length > 0) {
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < cols; j++) {
+        if(i < m.length && j < m[0].length) {
+          tempMatrix[i][j] = m[i][j];
+        }
+      }
+    }
+  }
+  
+  return tempMatrix;
+}
+
 float[][] rotateMatrix(float[][] vertices, PVector rotation) {
   // Recebe um float[][4] e um PVector de rotação em (x, y, z) e retorna a lista de pontos rotacionada
   
