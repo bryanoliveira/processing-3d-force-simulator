@@ -47,16 +47,16 @@ void fillPolygon(float[][] vertices, int[][] edges, color colour) {
   // encontra os extremos da linha de varredura
   for(int i = 0; i < edges.length; i++) {
     if(tabela[i][0] < Ymin) {
-      Ymin = (int) tabela[i][0];
+      Ymin = (int) tabela[i][0] - 2;
     }
     if(tabela[i][1] > Ymax) {
-      Ymax = (int) tabela[i][1];
+      Ymax = (int) tabela[i][1] + 2;
     }
     if(vertices[i][0] < Xmin) {
-      Xmin = vertices[i][0];
+      Xmin = vertices[i][0] - 2;
     }
     if(vertices[i][0] > Xmax) {
-      Xmax = vertices[i][0];
+      Xmax = vertices[i][0] + 2;
     }
   }
   
@@ -92,8 +92,8 @@ void fillPolygon(float[][] vertices, int[][] edges, color colour) {
     intersec = sort(intersec);
 
     stroke(colour);
-    for(int j = 0; j < intersec.length; j += 2) {
-      line(intersec[j], i, intersec[j + 1] - 3, i); // deixa um espaço na linha sem desenhar pra borda do objeto ser exibida
+    for(int j = 0; j < intersec.length-1; j += 2) {
+      line(intersec[j], i, intersec[j + 1], i);
     }
   }
 }

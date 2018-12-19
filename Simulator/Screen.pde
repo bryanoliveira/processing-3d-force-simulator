@@ -42,7 +42,7 @@ class Screen {
     addLine("uo: Rotação em Z", offset++, 2);
     addLine(",: Clona o objeto selecionado", offset++, 2);
     addLine(".: Destrói o objeto selecionado", offset++, 2);
-    addLine("b: Alterna algoritmo de preenchimento", offset++, 2);
+    addLine("b: Preenchimento (" + (world.useScanLine?"ScanLine)":"Processing)"), offset++, 2);
   }
   
   void showProjection(int projection) {
