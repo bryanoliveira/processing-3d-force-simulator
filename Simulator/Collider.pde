@@ -20,7 +20,7 @@ public class Collider implements ComponentInterface {
         min = min(object.vertices[0]);
         max = max(object.vertices[0]);
 
-        for(int i = 1; i < object.vertices.length; i++) {
+        for(int i = 1; i < object.vertices.length - axisVertices; i++) {
             float tempMin, tempMax;
             tempMin = min(object.vertices[i]);
             tempMax = max(object.vertices[i]);
@@ -45,6 +45,7 @@ public class Collider implements ComponentInterface {
     public void setCollision(Object with, PVector origin) {
         // recebe um objeto que entrou em colisão e o ponto de origem da força de repulsão
         nextToCollide.add(with);
+        // println("Collision " + millis());
 
         // physics.acceleration.add(object.position.x - origin.x, object.position.y - origin.y, object.position.z - origin.z);
     }

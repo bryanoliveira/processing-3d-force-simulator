@@ -133,7 +133,7 @@ public class GlobalPhysics {
 
             // começa com os pontos do segundo objeto que estão dentro do primeiro
             // pra cada vértice do segundo objeto
-            for(int j = 0; j < obj2.vertices.length; j++) {
+            for(int j = 0; j < obj2.vertices.length - axisVertices; j++) {
                 boolean outside = false;
                 // pra cada face do primeiro objeto
                 for(int k = 0; k < obj1.faces.length; k++) {
@@ -156,7 +156,7 @@ public class GlobalPhysics {
 
             // pega os pontos do primeiro objeto que estão dentro do segundo
             // pra cada vértice do primeiro objeto
-            for(int j = 0; j < obj1.vertices.length; j++) {
+            for(int j = 0; j < obj1.vertices.length - axisVertices; j++) {
                 boolean outside = false;
                 // pra cada face do segundo objeto
                 for(int k = 0; k < obj2.faces.length; k++) {
@@ -182,9 +182,9 @@ public class GlobalPhysics {
                 // faz a média entre os pontos de intersecção - esse vai ser o ponto de origem das forças de reação
                 PVector collisionOrigin = new PVector(0, 0, 0);
                 for(int j = 0; j < intersectionPoints.size(); j++) {
-                    collisionOrigin.x += intersectionPoints.get(i)[0];
-                    collisionOrigin.y += intersectionPoints.get(i)[1];
-                    collisionOrigin.z += intersectionPoints.get(i)[2];
+                    collisionOrigin.x += intersectionPoints.get(j)[0];
+                    collisionOrigin.y += intersectionPoints.get(j)[1];
+                    collisionOrigin.z += intersectionPoints.get(j)[2];
                 }
                 collisionOrigin.div(intersectionPoints.size());
 
