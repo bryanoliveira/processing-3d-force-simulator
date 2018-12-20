@@ -24,9 +24,12 @@ PVector[] observer; // observador/câmera
 float deltaTime = 0;
 float lastTime = 0;
 
+final int axisEdges = 9;
+final int axisVertices = 12; 
+
 public void setup() {
-  //size(1280, 720);
   
+  //fullScreen();
   strokeWeight(2);
   
   
@@ -183,7 +186,7 @@ public class Collider implements ComponentInterface {
         min = min(object.vertices[0]);
         max = max(object.vertices[0]);
 
-        for(int i = 1; i < object.vertices.length; i++) {
+        for(int i = 1; i < object.vertices.length - axisVertices; i++) {
             float tempMin, tempMax;
             tempMin = min(object.vertices[i]);
             tempMax = max(object.vertices[i]);
@@ -208,6 +211,7 @@ public class Collider implements ComponentInterface {
     public void setCollision(Object with, PVector origin) {
         // recebe um objeto que entrou em colisão e o ponto de origem da força de repulsão
         nextToCollide.add(with);
+        println("Collision" + millis());
 
         // physics.acceleration.add(object.position.x - origin.x, object.position.y - origin.y, object.position.z - origin.z);
     }
@@ -354,7 +358,7 @@ public class GlobalPhysics {
 
             // começa com os pontos do segundo objeto que estão dentro do primeiro
             // pra cada vértice do segundo objeto
-            for(int j = 0; j < obj2.vertices.length; j++) {
+            for(int j = 0; j < obj2.vertices.length - axisVertices; j++) {
                 boolean outside = false;
                 // pra cada face do primeiro objeto
                 for(int k = 0; k < obj1.faces.length; k++) {
@@ -377,7 +381,7 @@ public class GlobalPhysics {
 
             // pega os pontos do primeiro objeto que estão dentro do segundo
             // pra cada vértice do primeiro objeto
-            for(int j = 0; j < obj1.vertices.length; j++) {
+            for(int j = 0; j < obj1.vertices.length - axisVertices; j++) {
                 boolean outside = false;
                 // pra cada face do segundo objeto
                 for(int k = 0; k < obj2.faces.length; k++) {
@@ -403,9 +407,9 @@ public class GlobalPhysics {
                 // faz a média entre os pontos de intersecção - esse vai ser o ponto de origem das forças de reação
                 PVector collisionOrigin = new PVector(0, 0, 0);
                 for(int j = 0; j < intersectionPoints.size(); j++) {
-                    collisionOrigin.x += intersectionPoints.get(i)[0];
-                    collisionOrigin.y += intersectionPoints.get(i)[1];
-                    collisionOrigin.z += intersectionPoints.get(i)[2];
+                    collisionOrigin.x += intersectionPoints.get(j)[0];
+                    collisionOrigin.y += intersectionPoints.get(j)[1];
+                    collisionOrigin.z += intersectionPoints.get(j)[2];
                 }
                 collisionOrigin.div(intersectionPoints.size());
 
@@ -720,8 +724,8 @@ public class Object {
     this.rotation = new PVector(0, 0, 0);
     this.scale = new PVector(1, 1, 1);
     
-    this.vertices = copyMatrix(vertices, vertices.length+12, vertices[0].length);
-    this.edges = copyMatrix(arestas, arestas.length+9, arestas[0].length);
+    this.vertices = copyMatrix(vertices, vertices.length + axisVertices, vertices[0].length);
+    this.edges = copyMatrix(arestas, arestas.length + axisEdges, arestas[0].length);
    
     
     // TODO Pegar tamanho das linhas dos eixos depois do objeto ser inicializado
@@ -1557,7 +1561,7 @@ class World {
 
     // Desenha as linhas dos eixos XYZ
     strokeWeight(2);
-    for(int i = edges.length-9; i < edges.length; i++) {
+    for(int i = edges.length - axisEdges; i < edges.length; i++) {
       int p1 = edges[i][0],
           p2 = edges[i][1],
           xi = PApplet.parseInt(vertices[p1][0]),
@@ -1565,7 +1569,7 @@ class World {
           xf = PApplet.parseInt(vertices[p2][0]),
           yf = PApplet.parseInt(vertices[p2][1]);
         
-      stroke(axisColors[abs(edges.length-9 - i)%3]);
+      stroke(axisColors[abs(edges.length - axisEdges - i)%3]);
       line(xi, yi, xf, yf);
     }
     noStroke();
@@ -1693,7 +1697,7 @@ class World {
     return objects.get(selectedObject - 1).scale;
   }
 }
-  public void settings() {  fullScreen(); }
+  public void settings() {  size(1280, 720); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Simulator" };
     if (passedArgs != null) {

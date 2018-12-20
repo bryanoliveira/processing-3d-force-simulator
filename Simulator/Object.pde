@@ -37,8 +37,8 @@ public class Object {
     this.rotation = new PVector(0, 0, 0);
     this.scale = new PVector(1, 1, 1);
     
-    this.vertices = copyMatrix(vertices, vertices.length+12, vertices[0].length);
-    this.edges = copyMatrix(arestas, arestas.length+9, arestas[0].length);
+    this.vertices = copyMatrix(vertices, vertices.length + axisVertices, vertices[0].length);
+    this.edges = copyMatrix(arestas, arestas.length + axisEdges, arestas[0].length);
    
     
     // TODO Pegar tamanho das linhas dos eixos depois do objeto ser inicializado

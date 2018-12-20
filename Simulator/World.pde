@@ -172,7 +172,7 @@ class World {
 
     // Desenha as linhas dos eixos XYZ
     strokeWeight(2);
-    for(int i = edges.length-9; i < edges.length; i++) {
+    for(int i = edges.length - axisEdges; i < edges.length; i++) {
       int p1 = edges[i][0],
           p2 = edges[i][1],
           xi = int(vertices[p1][0]),
@@ -180,7 +180,7 @@ class World {
           xf = int(vertices[p2][0]),
           yf = int(vertices[p2][1]);
         
-      stroke(axisColors[abs(edges.length-9 - i)%3]);
+      stroke(axisColors[abs(edges.length - axisEdges - i)%3]);
       line(xi, yi, xf, yf);
     }
     noStroke();
