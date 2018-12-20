@@ -22,7 +22,7 @@ class World {
   
   World() {
     position = new PVector(0, 0, 1000);
-    rotation = new PVector(-HALF_PI, 0, 0);
+    rotation = new PVector(HALF_PI, 0, 0);
     scale = new PVector(1, 1, 1);
     physics = new GlobalPhysics();
   }
