@@ -10,8 +10,8 @@ final int axisEdges = 9;
 final int axisVertices = 12; 
 
 void setup() {
-  size(1280, 720);
-  //fullScreen();
+  // size(1280, 720);
+  fullScreen();
   strokeWeight(2);
   
   
