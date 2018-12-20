@@ -11,7 +11,7 @@ final int axisVertices = 12;
 
 void setup() {
   size(1280, 720);
-  //fullScreen();
+  // fullScreen();
   strokeWeight(2);
   
   
@@ -54,6 +54,18 @@ void draw() {
   screen.addLine(world.name, 0, 0);
   screen.addLine("\"" + world.selectedName() + "\" selected", 1, 2);
   screen.addLine("Position:  " + world.selectedPosition() + "\nRotation: " + world.selectedRotation() + "\nScale:      " + world.selectedScale(), 2, 2);
+}
+
+
+void mousePressed() {
+  int mY = height - mouseY;
+  println(mouseX, mouseY, mY);
+}
+
+
+void mouseReleased() {
+  int mY = height - mouseY;
+  println(mouseX, mouseY, mY);
 }
 
 
