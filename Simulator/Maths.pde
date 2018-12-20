@@ -83,6 +83,30 @@ float[][] rotateMatrix(float[][] vertices, PVector rotation) {
     {0, 0, 0, 1}
   };
 
+  float[][] rotationXN = {
+    {1, 0, 0, 0},
+    {0, cos(rotation.x), sin(rotation.x), 0},
+    {0, -sin(rotation.x), cos(rotation.x), 0},
+    {0, 0, 0, 1}
+  };
+  float[][] rotationYN = {
+    {cos(rotation.y), 0, sin(rotation.y), 0},
+    {0, 1, 0, 0},
+    {-sin(rotation.y), 0, cos(rotation.y), 0},
+    {0, 0, 0, 1}
+  };
+  float[][] rotationZN = {
+    {cos(rotation.z), sin(rotation.z), 0, 0},
+    {-sin(rotation.z), cos(rotation.z), 0, 0},
+    {0, 0, 1, 0},
+    {0, 0, 0, 1}
+  };
+
+  normalMatrix = multMatrix(normalMatrix, rotationXN);
+  normalMatrix = multMatrix(normalMatrix, rotationYN);
+  normalMatrix = multMatrix(normalMatrix, rotationZN);
+  
+
   // em x
   xn = normalMatrix[0][0];
   yn = normalMatrix[0][1];
@@ -95,7 +119,6 @@ float[][] rotateMatrix(float[][] vertices, PVector rotation) {
     {zn * xn * (1 - cos(t)) - yn * sin(t), zn * yn * (1 - cos(t)) + xn * sin(t), cos(t) + pow(zn, 2) * (1 - cos(t))  , 0},
     {0                                   , 0                                   , 0                                   , 1}
   };
-  normalMatrix = multMatrix(normalMatrix, rotationX);
   vertices = multMatrix(vertices, rotationX);
   
   // em y
@@ -110,11 +133,9 @@ float[][] rotateMatrix(float[][] vertices, PVector rotation) {
     {zn * xn * (1 - cos(t)) - yn * sin(t), zn * yn * (1 - cos(t)) + xn * sin(t), cos(t) + pow(zn, 2) * (1 - cos(t))  , 0},
     {0                                   , 0                                   , 0                                   , 1}
   };
-  normalMatrix = multMatrix(normalMatrix, rotationY);
   vertices = multMatrix(vertices, rotationY);
 
-  // z
-
+  // em z
   xn = normalMatrix[2][0];
   yn = normalMatrix[2][1];
   zn = normalMatrix[2][2];
