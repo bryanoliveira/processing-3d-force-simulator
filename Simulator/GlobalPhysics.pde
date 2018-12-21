@@ -169,7 +169,7 @@ public class GlobalPhysics {
                                  obj2.faces[k].normal.y * (obj1.computedVertices[j][1] - P2.y) +
                                  obj2.faces[k].normal.z * (obj1.computedVertices[j][2] - P2.z);
 
-                    if(prod > 0) outside = true;
+                    if(prod > 1) outside = true;
                 }
 
                 if(!outside) {

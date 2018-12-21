@@ -66,6 +66,19 @@ void keyRepeat() {
         case 'y':
           world.scaleSelected(0, 0, -0.05);
           break;
+
+        case '8':
+          world.accelerateSelected(0, 60, 0);
+          break;
+        case '2':
+          world.accelerateSelected(0, -60, 0);
+          break;
+        case '6':
+          world.accelerateSelected(60, 0, 0);
+          break;
+        case '4':
+          world.accelerateSelected(-60, 0, 0);
+          break;
       }
     }
   }
@@ -80,7 +93,7 @@ void keyPressed() {
         world.circleSelect(shift? -1 : 1);
         break;
       case ',':
-        world.cloneSelected();
+        //world.cloneSelected();
         break;
       case '.':
         world.destroySelected();
@@ -88,12 +101,16 @@ void keyPressed() {
       case 'b':
         world.useScanLine = !world.useScanLine;
     }
-  } else if(keyCode == SHIFT) {
-    shift = true;
-  } else if(keyCode == 112) {
-    helpPressed = !helpPressed;
-  }
-  
+  } else {
+    switch(keyCode) {
+      case SHIFT:
+        shift = true;
+        break;
+      case 112:
+        helpPressed = !helpPressed;
+        break;
+    }
+  }  
 }
 
 void keyReleased() {
