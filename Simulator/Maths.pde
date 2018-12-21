@@ -90,9 +90,9 @@ float[][] rotateMatrix(float[][] vertices, PVector rotation) {
     {0, 0, 0, 1}
   };
   float[][] rotationYN = {
-    {cos(rotation.y), 0, sin(rotation.y), 0},
+    {cos(rotation.y), 0, -sin(rotation.y), 0},
     {0, 1, 0, 0},
-    {-sin(rotation.y), 0, cos(rotation.y), 0},
+    {sin(rotation.y), 0, cos(rotation.y), 0},
     {0, 0, 0, 1}
   };
   float[][] rotationZN = {
@@ -102,53 +102,10 @@ float[][] rotateMatrix(float[][] vertices, PVector rotation) {
     {0, 0, 0, 1}
   };
 
-  normalMatrix = multMatrix(normalMatrix, rotationXN);
-  normalMatrix = multMatrix(normalMatrix, rotationYN);
-  normalMatrix = multMatrix(normalMatrix, rotationZN);
-  
+  vertices = multMatrix(vertices, rotationXN);
+  vertices = multMatrix(vertices, rotationYN);
+  vertices = multMatrix(vertices, rotationZN);
 
-  // em x
-  xn = normalMatrix[0][0];
-  yn = normalMatrix[0][1];
-  zn = normalMatrix[0][2];
-  t = rotation.x;
-
-  float[][] rotationX = {
-    {cos(t) + pow(xn, 2) * (1 - cos(t))  , xn * yn * (1 - cos(t)) - zn * sin(t), xn * zn * (1 - cos(t)) + yn * sin(t), 0},
-    {yn * xn * (1 - cos(t)) + zn * sin(t), cos(t) + pow(yn, 2) * (1 - cos(t))  , yn * zn * (1 - cos(t)) - xn * sin(t), 0}, 
-    {zn * xn * (1 - cos(t)) - yn * sin(t), zn * yn * (1 - cos(t)) + xn * sin(t), cos(t) + pow(zn, 2) * (1 - cos(t))  , 0},
-    {0                                   , 0                                   , 0                                   , 1}
-  };
-  vertices = multMatrix(vertices, rotationX);
-  
-  // em y
-  xn = normalMatrix[1][0];
-  yn = normalMatrix[1][1];
-  zn = normalMatrix[1][2];
-  t = rotation.y;
-
-  float[][] rotationY = {
-    {cos(t) + pow(xn, 2) * (1 - cos(t))  , xn * yn * (1 - cos(t)) - zn * sin(t), xn * zn * (1 - cos(t)) + yn * sin(t), 0},
-    {yn * xn * (1 - cos(t)) + zn * sin(t), cos(t) + pow(yn, 2) * (1 - cos(t))  , yn * zn * (1 - cos(t)) - xn * sin(t), 0}, 
-    {zn * xn * (1 - cos(t)) - yn * sin(t), zn * yn * (1 - cos(t)) + xn * sin(t), cos(t) + pow(zn, 2) * (1 - cos(t))  , 0},
-    {0                                   , 0                                   , 0                                   , 1}
-  };
-  vertices = multMatrix(vertices, rotationY);
-
-  // em z
-  xn = normalMatrix[2][0];
-  yn = normalMatrix[2][1];
-  zn = normalMatrix[2][2];
-  t = rotation.z;
-
-  float[][] rotationZ = {
-    {cos(t) + pow(xn, 2) * (1 - cos(t))  , xn * yn * (1 - cos(t)) - zn * sin(t), xn * zn * (1 - cos(t)) + yn * sin(t), 0},
-    {yn * xn * (1 - cos(t)) + zn * sin(t), cos(t) + pow(yn, 2) * (1 - cos(t))  , yn * zn * (1 - cos(t)) - xn * sin(t), 0}, 
-    {zn * xn * (1 - cos(t)) - yn * sin(t), zn * yn * (1 - cos(t)) + xn * sin(t), cos(t) + pow(zn, 2) * (1 - cos(t))  , 0},
-    {0                                   , 0                                   , 0                                   , 1}
-  };
-  vertices = multMatrix(vertices, rotationZ);
-  
   return vertices;
 }
 

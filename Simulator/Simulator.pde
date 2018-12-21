@@ -170,7 +170,7 @@ void load(String fileName) {
     // lê os atributos da física
     Physics physics = (Physics) object.getComponent(new Physics(null));
     if(physics != null) {
-      physics.useGravity = (1 == Integer.parseInt(fileLines[cursorPosition++]));
+      physics.isRigidbody = (1 == Integer.parseInt(fileLines[cursorPosition++]));
       physics.mass = Float.parseFloat(fileLines[cursorPosition++]);
     }
 
