@@ -4,14 +4,17 @@ public class Object {
   // definições imutáveis do objeto
   String name;
   float[][] vertices;
+  float[][] axisVertices;
   int[][] edges;
+  int[][] axisEdges;
   color[] axisColors;
   Face[] faces;
   
   // mundo
   int index = 1; // índice desse objeto
   float[][] computedVertices; // vértices computadas prontas para ser exibidas
-  
+  float[][] computedAxisVertices;
+
   // vetores mutáveis de estado
   PVector position;
   PVector rotation;
@@ -37,90 +40,39 @@ public class Object {
     this.rotation = new PVector(0, 0, 0);
     this.scale = new PVector(1, 1, 1);
     
-    this.vertices = copyMatrix(vertices, vertices.length + axisVertices, vertices[0].length);
-    this.edges = copyMatrix(arestas, arestas.length + axisEdges, arestas[0].length);
-   
-    
-    // TODO Pegar tamanho das linhas dos eixos depois do objeto ser inicializado
+    this.vertices = copyMatrix(vertices, 0, 0, vertices.length, vertices[0].length);
+    this.edges = copyMatrix(arestas, 0, 0, arestas.length, arestas[0].length);    
 
-    // X-Axis
-    this.vertices[vertices.length][0] = 3;
-    this.vertices[vertices.length][1] = 0;
-    this.vertices[vertices.length][2] = 0;
-    
-    this.vertices[vertices.length+1][0] = -3;
-    this.vertices[vertices.length+1][1] = 0;
-    this.vertices[vertices.length+1][2] = 0;
+    // Axis vertices
+    float[][] axisVertices = {
+      {3, 0, 0, 1},
+      {-3, 0, 0, 1},
+      {0, 3, 0, 1},
+      {0, -3, 0, 1},
+      {0, 0, 3, 1},
+      {0, 0, -3, 1},
+      {2.8, 0.2, 0, 1},
+      {0.2, 2.8, 0, 1},
+      {0.2, 0, 2.8, 1},
+      {2.8, -0.2, 0, 1},
+      {-0.2, 2.8, 0, 1},
+      {-0.2, 0, 2.8, 1}
+    };
+    this.axisVertices = axisVertices;
 
-    this.vertices[vertices.length+6][0] = 2.8;
-    this.vertices[vertices.length+6][1] = 0.2;
-    this.vertices[vertices.length+6][2] = 0;
-
-    this.vertices[vertices.length+9][0] = 2.8;
-    this.vertices[vertices.length+9][1] = -0.2;
-    this.vertices[vertices.length+9][2] = 0;
-
-    this.edges[arestas.length][0] = vertices.length;
-    this.edges[arestas.length][1] = vertices.length+1;
-
-    this.edges[arestas.length+3][0] = vertices.length;
-    this.edges[arestas.length+3][1] = vertices.length+6;
-
-    this.edges[arestas.length+6][0] = vertices.length;
-    this.edges[arestas.length+6][1] = vertices.length+9;
-    
-    // Y-Axis
-    this.vertices[vertices.length+2][0] = 0;
-    this.vertices[vertices.length+2][1] = 3;
-    this.vertices[vertices.length+2][2] = 0;
-    
-    this.vertices[vertices.length+3][0] = 0;
-    this.vertices[vertices.length+3][1] = -3;
-    this.vertices[vertices.length+3][2] = 0;
-
-    this.vertices[vertices.length+7][0] = 0.2;
-    this.vertices[vertices.length+7][1] = 2.8;
-    this.vertices[vertices.length+7][2] = 0;
-
-    this.vertices[vertices.length+10][0] = -0.2;
-    this.vertices[vertices.length+10][1] = 2.8;
-    this.vertices[vertices.length+10][2] = 0;
-
-    this.edges[arestas.length+1][0] = vertices.length+2;
-    this.edges[arestas.length+1][1] = vertices.length+3;
-
-    this.edges[arestas.length+4][0] = vertices.length+2;
-    this.edges[arestas.length+4][1] = vertices.length+7;
-
-    this.edges[arestas.length+7][0] = vertices.length+2;
-    this.edges[arestas.length+7][1] = vertices.length+10;
-    
-    // Z-Axis
-    this.vertices[vertices.length+4][0] = 0;
-    this.vertices[vertices.length+4][1] = 0;
-    this.vertices[vertices.length+4][2] = 3;
-    
-    this.vertices[vertices.length+5][0] = 0;
-    this.vertices[vertices.length+5][1] = 0;
-    this.vertices[vertices.length+5][2] = -3;
-
-    this.vertices[vertices.length+8][0] = 0.2;
-    this.vertices[vertices.length+8][1] = 0;
-    this.vertices[vertices.length+8][2] = 2.8;
-
-    this.vertices[vertices.length+11][0] = -0.2;
-    this.vertices[vertices.length+11][1] = 0;
-    this.vertices[vertices.length+11][2] = 2.8;
-
-    this.edges[arestas.length+2][0] = vertices.length+4;
-    this.edges[arestas.length+2][1] = vertices.length+5;
-
-    this.edges[arestas.length+5][0] = vertices.length+4;
-    this.edges[arestas.length+5][1] = vertices.length+8;
-
-    this.edges[arestas.length+8][0] = vertices.length+4;
-    this.edges[arestas.length+8][1] = vertices.length+11;
-    
+    // Axis edges
+    int[][] axisEdges = {
+      {0, 1},
+      {2, 3},
+      {4, 5},
+      {0, 6},
+      {2, 7},
+      {4, 8},
+      {0, 9},
+      {2, 10},
+      {4, 11}
+    };
+    this.axisEdges = axisEdges;
     
     // Axis colors
     this.axisColors = new color[3];
@@ -189,7 +141,7 @@ public class Object {
   public float[][] getVertices() {
     // Calcula as transformações nos vértices do objeto e os retorna
     
-    float[][] tempVertices = copyMatrix(vertices, vertices.length, 4);
+    float[][] tempVertices = copyMatrix(vertices, 0, 0, vertices.length, 4);
     
     // escala
     tempVertices = scaleMatrix(tempVertices, scale);
@@ -202,12 +154,28 @@ public class Object {
     
     return tempVertices;
   }
+
+  public float[][] getAxisVertices() { 
+    // Calcula as transformações nos vértices dos eixos XYZ do objeto e os retorna
+    float[][] tempVertices = copyMatrix(axisVertices, 0, 0, axisVertices.length, 4);
+
+    // rotaciona
+    tempVertices = rotateMatrix(tempVertices, rotation);
+    
+    // translada
+    tempVertices = translateMatrix(tempVertices, position);
+    
+    return tempVertices;
+  }
   
   public int[][] getEdges() {
-    // Retorna as arestas do polígono
-    // Pode fazer algum cálculo adicional aqui
-    
+    // Retorna as arestas do polígono    
     return edges;
+  }
+
+  public int[][] getAxisEdges() {
+    // Retorna as arestas dos eixos XYZ do objeto
+    return axisEdges;
   }
 
   public color[] getAxisColors() {

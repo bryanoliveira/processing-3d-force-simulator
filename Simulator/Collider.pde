@@ -22,7 +22,7 @@ public class Collider implements ComponentInterface {
         min = min(object.vertices[0]);
         max = max(object.vertices[0]);
 
-        for(int i = 1; i < object.vertices.length - axisVertices; i++) {
+        for(int i = 1; i < object.vertices.length; i++) {
             float tempMin, tempMax;
             tempMin = min(object.vertices[i]);
             tempMax = max(object.vertices[i]);
