@@ -247,6 +247,17 @@ class World {
       last.rescale(new PVector(x, y, z));
     }
   }
+  void accelerateSelected(float x, float y, float z) {
+    // Acelera o objeto selecionado
+    
+    if(selectedObject == 0) {
+      println("Can't accelerate world");
+      return;
+    } else {
+      Object last = objects.get(selectedObject - 1);
+      ((Physics) last.getComponent(new Physics(null))).acceleration.add(new PVector(x, y, z));
+    }
+  }
   
   String selectedName() {
     // Retorna o nome do objeto selecionado
