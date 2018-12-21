@@ -15,9 +15,6 @@ class World {
   int selectedObject = 0; // 0: Camera
   
   boolean useScanLine = true; // usar algoritmo de preenchimento scanline ou o do processing?
-  
-  // 0: Cavaleira, 1: Cabinet, 2: Isométrica, 3: Perspectiva em Z, 4: Perspectiva em X e em Z
-  // int projection = 3;
 
   GlobalPhysics physics;
  
@@ -86,15 +83,19 @@ class World {
       Object object = objectsToDraw.get(i);
       
       object.computedVertices = object.getVertices();
+      object.computedAxisVertices = object.getAxisVertices();
 
       // escala no mundo
       object.computedVertices = scaleMatrix(object.computedVertices, scale);
+      object.computedAxisVertices = scaleMatrix(object.computedAxisVertices, scale);
 
       // rotaciona no mundo
       object.computedVertices = rotateMatrix(object.computedVertices, rotation);
+      object.computedAxisVertices = rotateMatrix(object.computedAxisVertices, rotation);
     
       // translada no mundo
       object.computedVertices = translateMatrix(object.computedVertices, position);
+      object.computedAxisVertices = translateMatrix(object.computedAxisVertices, position);
     }
     
     // ordena os objetos de acordo com o z
@@ -105,18 +106,21 @@ class World {
       Object object = objectsToDraw.get(i);
       
       float[][] computedVertices = object.computedVertices;
+      float[][] computedAxisVertices = object.computedAxisVertices;
       Face[] faces = object.getFaces();
       
       // projeta
       computedVertices = perspectiveZ(computedVertices);
+      computedAxisVertices = perspectiveZ(computedAxisVertices);
       
       computedVertices = adjustDevice(computedVertices, limitMin, limitMax);
+      computedAxisVertices = adjustDevice(computedAxisVertices, limitMin, limitMax);
       boolean select = (selectedObject == object.index)?true:false;  
-      drawObject(select, computedVertices, object.getEdges(), object.getAxisColors(), faces);
+      drawObject(select, computedVertices, computedAxisVertices, object.getEdges(), object.getAxisEdges(), object.getAxisColors(), faces);
     }
   }
   
-  void drawObject(boolean select, float[][] vertices, int[][] edges, color[] axisColors, Face[] faces) {
+  void drawObject(boolean select, float[][] vertices, float[][] axisVertices, int[][] edges, int[][] axisEdges, color[] axisColors, Face[] faces) {
     // Desenha um objeto e suas faces, se tiver
     
     // Se tiver faces, pinta as faces visiveis 
@@ -162,20 +166,22 @@ class World {
     } 
 
     // Desenha as linhas dos eixos XYZ
-    strokeWeight(2);
-    for(int i = edges.length - axisEdges; i < edges.length; i++) {
-      int p1 = edges[i][0],
-          p2 = edges[i][1],
-          xi = int(vertices[p1][0]),
-          yi = int(vertices[p1][1]),
-          xf = int(vertices[p2][0]),
-          yf = int(vertices[p2][1]);
-        
-      stroke(axisColors[abs(edges.length - axisEdges - i)%3]);
-      line(xi, yi, xf, yf);
+    if(select) {
+      strokeWeight(2);
+      for(int i = 0; i < axisEdges.length; i++) {
+        int p1 = axisEdges[i][0],
+            p2 = axisEdges[i][1],
+            xi = int(axisVertices[p1][0]),
+            yi = int(axisVertices[p1][1]),
+            xf = int(axisVertices[p2][0]),
+            yf = int(axisVertices[p2][1]);
+          
+        stroke(axisColors[i % 3]);
+        line(xi, yi, xf, yf);
+      }
     }
+    
     noStroke();
-
   }
   
   /**** GERENCIAMENTO DOS OBJETOS DA CENA ****/

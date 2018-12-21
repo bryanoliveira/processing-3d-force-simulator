@@ -26,85 +26,10 @@ float [][] adjustDevice(float [][] vertices, PVector limitMin, PVector limitMax)
   return tempVerties;
 }
 
-float[][] cavalier(float[][] vertices) {
-  // Recebe um float[][3] e retorna um float[][2] com pontos recalculados de acordo com a perspectiva
-  
-  float[][] tempVertices = copyMatrix(vertices, vertices.length, 4);
-  
-  int angle = 45;
-  
-  for(int i = 0; i < tempVertices.length; i++) {
-    float[][] hPoint = {
-      {tempVertices[i][0], tempVertices[i][1], tempVertices[i][2], 1}
-    };
-    
-    // matriz de projeção cavaleira
-    float[][] mCav = {
-      {1, 0, 0, 0},
-      {0, 1, 0, 0},
-      {0, 0, 0, 0},
-      {cos(angle * PI/180.0) * tempVertices[i][2], sin(angle * PI/180.0) * tempVertices[i][2], 0, 1},
-    };
-    tempVertices[i] = multMatrix(hPoint, mCav)[0];
-  }
-   
-  // retorna a lista de pontos transformados
-  return homogeneousToCartesian2D(tempVertices);
-}
-
-float[][] cabinet(float[][] vertices) {
-  // Recebe um float[][3] e retorna um float[][2] com pontos recalculados de acordo com a perspectiva
-  
-  float[][] tempVertices = copyMatrix(vertices, vertices.length, 4);
-  int angle = 45;
-  
-  for(int i = 0; i < tempVertices.length; i++) {
-    float[][] hPoint = {
-      {tempVertices[i][0], tempVertices[i][1], tempVertices[i][2], 1}
-    };
-    
-    // matriz de projeção cabinet
-    float[][] mCav = {
-      {1, 0, 0, 0},
-      {0, 1, 0, 0},
-      {0, 0, 0, 0},
-      {cos(angle * PI/180.0) * tempVertices[i][2] / 2, sin(angle * PI/180) * tempVertices[i][2] / 2, 0, 1},
-    };
-    tempVertices[i] = multMatrix(hPoint, mCav)[0];
-  }
-  
-  return homogeneousToCartesian2D(tempVertices);
-}
-
-float[][] isometric(float[][] vertices) {
-  // Recebe um float[][3] e retorna um float[][2] com pontos recalculados de acordo com a perspectiva
-  
-  float[][] tempVertices = copyMatrix(vertices, vertices.length, 4);
-  
-  for(int i = 0; i < tempVertices.length; i++) {
-    float[][] hPoint = {
-      {tempVertices[i][0], tempVertices[i][1], tempVertices[i][2], 1}
-    };
-    
-    // matriz de projeção isométrica
-    float[][] iso = {
-      {-cos(45 * PI/180), -sin(35.26 * PI/180)*sin(45 * PI/180), 0, 0},
-      {0, cos(35.26 * PI/180), 0, 0},
-      {-sin(45 * PI/180), sin(35.26 * PI/180)*cos(45 * PI/180), 0, 0},
-      {0, 0, 0, 1},
-    };
-    
-    tempVertices[i] = multMatrix(hPoint, iso)[0];
-
-  }
-  
-  return homogeneousToCartesian2D(tempVertices);
-}
-
 float[][] perspectiveZ(float[][] vertices) {
   // Recebe um float[][3] e retorna um float[][2] com pontos recalculados de acordo com a perspectiva
   
-  float[][] tempVertices = copyMatrix(vertices, vertices.length, 4);
+  float[][] tempVertices = copyMatrix(vertices, 0, 0, vertices.length, 4);
   
   for(int i = 0; i < tempVertices.length; i++) {
     float[][] hPoint = {
@@ -114,30 +39,6 @@ float[][] perspectiveZ(float[][] vertices) {
     // matriz de projeção perspectiva em z
     float[][] pers = {
       {1, 0, 0, 0},
-      {0, 1, 0, 0},
-      {0, 0, 0, 1.0/width},
-      {0, 0, 0, 1},
-    };
-    
-    tempVertices[i] = multMatrix(hPoint, pers)[0];
-  }
-  
-  return homogeneousToCartesian2D(tempVertices);
-}
-
-float[][] perspectiveXZ(float[][] vertices) {
-  // Recebe um float[][3] e retorna um float[][2] com pontos recalculados de acordo com a perspectiva
-  
-  float[][] tempVertices = copyMatrix(vertices, vertices.length, 4);
-  
-  for(int i = 0; i < tempVertices.length; i++) {
-    float[][] hPoint = {
-      {tempVertices[i][0], tempVertices[i][1], tempVertices[i][2], 1}
-    };
-    
-    // matriz de projeção perspectiva em x e z
-    float[][] pers = {
-      {1, 0, 0, 1.0/width},
       {0, 1, 0, 0},
       {0, 0, 0, 1.0/width},
       {0, 0, 0, 1},

@@ -12,24 +12,11 @@ PVector[] observer; // observador/câmera
 float deltaTime = 0;
 float lastTime = 0;
 
-final int axisEdges = 9;
-final int axisVertices = 12; 
-
 
 void setup() {
   size(1280, 720);
   // fullScreen();
   strokeWeight(2);
-  
-  
-  // um observador pra cada projeção
-  // TODO isso pode ser tunado melhor
-  /*observer = new PVector[5]; 
-  observer[0] = new PVector(700, 700, -1000);
-  observer[1] = new PVector(350, 350, -1000);
-  observer[2] = new PVector(1000, 1000, -1000);
-  observer[3] = new PVector(0, 0, -100);
-  observer[4] = new PVector(0, 0, -100);*/
   
   world = new World();
   screen = new Screen();
@@ -57,7 +44,7 @@ void draw() {
   
   // exibe interface
   screen.showFPS();
-  screen.showProjection();
+  screen.showInfo();
   screen.addLine(world.name, 0, 0);
   screen.addLine("\"" + world.selectedName() + "\" selected", 1, 2);
   screen.addLine("Position:  " + world.selectedPosition() + "\nRotation: " + world.selectedRotation() + "\nScale:      " + world.selectedScale(), 2, 2);

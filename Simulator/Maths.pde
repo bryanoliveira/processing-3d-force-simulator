@@ -35,14 +35,14 @@ float[][] multMatrix(float[][] m1, float[][] m2) {
   return res;
 }
 
-float[][] copyMatrix(float[][] m, int rows, int cols) {
+float[][] copyMatrix(float[][] m, int initRows, int initCols, int rows, int cols) {
   // Copia uma matriz m para uma nova matriz com dimensões [rows][cols]
   
   float[][] tempMatrix = new float[rows][cols];
   
   if(m.length > 0) {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
+    for(int i = initRows; i < rows; i++) {
+      for(int j = initCols; j < cols; j++) {
         if(i < m.length && j < m[0].length) {
           tempMatrix[i][j] = m[i][j];
         }
@@ -54,14 +54,14 @@ float[][] copyMatrix(float[][] m, int rows, int cols) {
   return tempMatrix;
 }
 
-int[][] copyMatrix(int[][] m, int rows, int cols) {
+int[][] copyMatrix(int[][] m, int initRows, int initCols, int rows, int cols) {
   // Copia uma matriz m para uma nova matriz com dimensões [rows][cols]
   
   int[][] tempMatrix = new int[rows][cols];
   
   if(m.length > 0) {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
+    for(int i = initRows; i < rows; i++) {
+      for(int j = initCols; j < cols; j++) {
         if(i < m.length && j < m[0].length) {
           tempMatrix[i][j] = m[i][j];
         }
