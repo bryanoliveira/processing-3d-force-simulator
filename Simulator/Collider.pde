@@ -4,8 +4,10 @@ public class Collider implements ComponentInterface {
 
     float radius; // raio de intersecção em que o mundo considera colisão global
 
-    ArrayList<Object> nextToCollide = new ArrayList<Object>();
-    ArrayList<Object> collisions = new ArrayList<Object>();
+    boolean applyForces = false;
+    PVector forces = new PVector(0, 0, 0);
+    PVector velocity = new PVector(0, 0, 0);
+    
 
     public Collider(Object object) {
         this.object = object;
@@ -35,17 +37,33 @@ public class Collider implements ComponentInterface {
         // recebe objetos identificados pelo mundo como colisão global e calcula pontos de colisão local
         // DEVE SER EXECUTADO APÓS A FÍSICA DO MUNDO
 
-        // reseta as colisões a cada timestep
-        collisions = new ArrayList<Object>(nextToCollide);
-        nextToCollide.clear();
+        if(!applyForces) return;
+        else applyForces = false;
 
         // atualiza as propriedades físicas dele
+        physics.acceleration.add(forces);
+        physics.velocity = velocity.copy();
+
+        // reseta as colisões a cada timestep
+        forces.x = forces.y = forces.z = velocity.x = velocity.y = velocity.z = 0;
     }
 
     public void setCollision(Object with, PVector origin) {
         // recebe um objeto que entrou em colisão e o ponto de origem da força de repulsão
-        nextToCollide.add(with);
+        // https://en.wikibooks.org/wiki/Fundamentals_of_Physics/Linear_Momentum_and_Collisions
+
         screen.addLine("Collision checked!", 5, 2);
-        // physics.acceleration.add(object.position.x - origin.x, object.position.y - origin.y, object.position.z - origin.z);
+
+        Physics other = (Physics) with.getComponent(new Physics(null));
+        PVector thisVelocity = physics.velocity.copy();
+        PVector otherVelocity = other.velocity.copy();
+
+        thisVelocity.mult((physics.mass - other.mass) / (physics.mass + other.mass));
+        otherVelocity.mult((2 * other.mass) / (physics.mass + other.mass));
+
+        velocity = thisVelocity;
+        velocity.add(otherVelocity);
+
+        applyForces = true;
     }
 }

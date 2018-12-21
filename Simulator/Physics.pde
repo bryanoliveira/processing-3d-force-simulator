@@ -5,9 +5,7 @@ public class Physics implements ComponentInterface {
     PVector acceleration;
     float mass = 10;
 
-
-
-    boolean useGravity = true;
+    boolean isRigidbody = true;
 
     public Physics(Object object) {
         this.object = object;
@@ -22,6 +20,8 @@ public class Physics implements ComponentInterface {
         // calcula o deslocamento do objeto dadas as interações (aplicação das forças)
         // DEVE SER EXECUTADO APÓS TODOS OS COMPONENTES DE FÍSICA
 
+        if(!isRigidbody) return;
+
         applyAcceleration();
         applyVelocity();
 
@@ -33,9 +33,7 @@ public class Physics implements ComponentInterface {
 
         PVector tempAcc = acceleration.copy();
 
-        if(useGravity) {
-            tempAcc.add(new PVector(0, -9.80665, 0));
-        }
+        tempAcc.add(new PVector(0, -9.80665, 0)); // gravidade
 
         velocity.add(tempAcc.mult(deltaTime));
     }

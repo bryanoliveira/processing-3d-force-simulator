@@ -40,7 +40,7 @@ float[][] perspectiveZ(float[][] vertices) {
     float[][] pers = {
       {1, 0, 0, 0},
       {0, 1, 0, 0},
-      {0, 0, 0, 1.0/width},
+      {0, 0, 0, 1/world.limitMax.x},
       {0, 0, 0, 1},
     };
     
