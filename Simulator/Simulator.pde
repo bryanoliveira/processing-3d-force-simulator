@@ -29,7 +29,7 @@ void setup() {
 
   lastTime = millis();
   
-  load("figure.1.dat");
+  load("scenes/scene1.dat");
 }
 
 
