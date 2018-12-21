@@ -6,6 +6,8 @@ class World {
   PVector position;
   PVector rotation;
   PVector scale;
+
+  PVector observer;
   
   PVector limitMin, limitMax; // limites da tela para centralizar objetos no (0, 0)
 
@@ -15,7 +17,7 @@ class World {
   boolean useScanLine = true; // usar algoritmo de preenchimento scanline ou o do processing?
   
   // 0: Cavaleira, 1: Cabinet, 2: Isométrica, 3: Perspectiva em Z, 4: Perspectiva em X e em Z
-  int projection = 3;
+  // int projection = 3;
 
   GlobalPhysics physics;
  
@@ -27,12 +29,16 @@ class World {
     physics = new GlobalPhysics();
   }
   
-  void init(String name, PVector limitMin, PVector limitMax) {
+  void init(String name, PVector limitMin, PVector limitMax, PVector position, PVector rotation, PVector scale, PVector observer) {
     // Inicializa as dimensões do mundo
     
     this.name = name;
     this.limitMin = limitMin;
     this.limitMax = limitMax;
+    this.position = position;
+    this.rotation = rotation;
+    this.scale = scale;
+    this.observer = observer;
 
     physics.init();
   }

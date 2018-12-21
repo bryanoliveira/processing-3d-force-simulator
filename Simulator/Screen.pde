@@ -45,7 +45,7 @@ class Screen {
     addLine("b: Preenchimento (" + (world.useScanLine?"ScanLine)":"Processing)"), offset++, 2);
   }
   
-  void showProjection(int projection) {
+  void showProjection() {
     textAlign(RIGHT);
     addText("Projeção Perspectiva Z", new PVector(width - 2 * defaultPadding, height - (defaultPadding + defaultTextSize)), defaultTextSize, color(130));
     textAlign(LEFT);

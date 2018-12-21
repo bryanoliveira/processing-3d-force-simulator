@@ -230,7 +230,7 @@ public class Object {
       faces[i].normal = new PVector((P3.y - P2.y) * (P1.z - P2.z) - (P1.y - P2.y) * (P3.z - P2.z), 
                                    (P3.z - P2.z) * (P1.x - P2.x) - (P1.z - P2.z) * (P3.x - P2.x), 
                                    (P3.x - P2.x) * (P1.y - P2.y) - (P1.x - P2.x) * (P3.y - P2.y));
-      float prod = faces[i].normal.x * (observer[world.projection].x - P2.x) + faces[i].normal.y * (observer[world.projection].y - P2.y) + faces[i].normal.z * (observer[world.projection].z - P2.z);
+      float prod = faces[i].normal.x * (world.observer.x - P2.x) + faces[i].normal.y * (world.observer.y - P2.y) + faces[i].normal.z * (world.observer.z - P2.z);
       
       if(prod < 0) {
         continue;
@@ -243,10 +243,10 @@ public class Object {
       }
       avgPosition.div(3);
       // calcula a distância para a origem
-      faces[i].distance = sqrt(pow(avgPosition.x - observer[world.projection].x, 2) + pow(avgPosition.y - observer[world.projection].y, 2) + pow(avgPosition.z - observer[world.projection].z, 2));
+      faces[i].distance = sqrt(pow(avgPosition.x - world.observer.x, 2) + pow(avgPosition.y - world.observer.y, 2) + pow(avgPosition.z - world.observer.z, 2));
       
       // descarta faces que estão atrás do observador
-      if(avgPosition.z <= observer[world.projection].z) {
+      if(avgPosition.z <= world.observer.z) {
         continue;
       } else {        
         facesToDraw.add(faces[i]);
@@ -284,8 +284,8 @@ public class ObjectComparator implements Comparator<Object> {
   
   public int compare(Object p1, Object p2) {
     // o mesmo resultado pode ser obtido ordenando apenas o Z, mas o cálculo da distância ficou insignificante e garante maior robustez futura
-    if(sqrt(pow(p1.massCenter.x - observer[world.projection].x, 2) + pow(p1.massCenter.y - observer[world.projection].y, 2) + pow(p1.massCenter.z - observer[world.projection].z, 2)) < 
-       sqrt(pow(p2.massCenter.x - observer[world.projection].x, 2) + pow(p2.massCenter.y - observer[world.projection].y, 2) + pow(p2.massCenter.z - observer[world.projection].z, 2))) {
+    if(sqrt(pow(p1.massCenter.x - world.observer.x, 2) + pow(p1.massCenter.y - world.observer.y, 2) + pow(p1.massCenter.z - world.observer.z, 2)) < 
+       sqrt(pow(p2.massCenter.x - world.observer.x, 2) + pow(p2.massCenter.y - world.observer.y, 2) + pow(p2.massCenter.z - world.observer.z, 2))) {
       return 1;
     } else {
       return -1;
