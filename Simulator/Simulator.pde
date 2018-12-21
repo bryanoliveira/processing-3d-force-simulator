@@ -59,13 +59,11 @@ void draw() {
 
 void mousePressed() {
   int mY = height - mouseY;
-  println(mouseX, mouseY, mY);
 }
 
 
 void mouseReleased() {
   int mY = height - mouseY;
-  println(mouseX, mouseY, mY);
 }
 
 

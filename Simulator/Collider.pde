@@ -45,8 +45,7 @@ public class Collider implements ComponentInterface {
     public void setCollision(Object with, PVector origin) {
         // recebe um objeto que entrou em colisão e o ponto de origem da força de repulsão
         nextToCollide.add(with);
-        // println("Collision " + millis());
-
+        screen.addLine("Collision!", 5, 2);
         // physics.acceleration.add(object.position.x - origin.x, object.position.y - origin.y, object.position.z - origin.z);
     }
 }
