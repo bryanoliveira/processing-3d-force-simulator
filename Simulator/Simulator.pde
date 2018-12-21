@@ -17,12 +17,12 @@ void setup() {
   
   // um observador pra cada projeção
   // TODO isso pode ser tunado melhor
-  observer = new PVector[5]; 
+  /*observer = new PVector[5]; 
   observer[0] = new PVector(700, 700, -1000);
   observer[1] = new PVector(350, 350, -1000);
   observer[2] = new PVector(1000, 1000, -1000);
-  observer[3] = new PVector(0, 0, -10000);
-  observer[4] = new PVector(0, 0, -10000);
+  observer[3] = new PVector(0, 0, -100);
+  observer[4] = new PVector(0, 0, -100);*/
   
   world = new World();
   screen = new Screen();
@@ -50,7 +50,7 @@ void draw() {
   
   // exibe interface
   screen.showFPS();
-  screen.showProjection(world.projection);
+  screen.showProjection();
   screen.addLine(world.name, 0, 0);
   screen.addLine("\"" + world.selectedName() + "\" selected", 1, 2);
   screen.addLine("Position:  " + world.selectedPosition() + "\nRotation: " + world.selectedRotation() + "\nScale:      " + world.selectedScale(), 2, 2);
@@ -77,7 +77,18 @@ void load(String fileName) {
   
   // lê as dimensões do dispositivo
   String[] worldDimensions = split(fileLines[cursorPosition++], " ");
+
+  // lê a posição da câmera
+  String[] cameraAttrs = split(fileLines[cursorPosition++], " ");
+  PVector cameraPosition = new PVector(Float.parseFloat(cameraAttrs[0]), Float.parseFloat(cameraAttrs[1]), Float.parseFloat(cameraAttrs[2]));
+  PVector cameraRotation = new PVector(Float.parseFloat(cameraAttrs[3]), Float.parseFloat(cameraAttrs[4]), Float.parseFloat(cameraAttrs[5]));
+  PVector cameraScale = new PVector(Float.parseFloat(cameraAttrs[6]), Float.parseFloat(cameraAttrs[7]), Float.parseFloat(cameraAttrs[8]));
   
+  // lê a posição do observador
+  String[] obsAttrs = split(fileLines[cursorPosition++], " ");
+  PVector observer = new PVector(Float.parseFloat(obsAttrs[0]), Float.parseFloat(obsAttrs[1]), Float.parseFloat(obsAttrs[2]));
+
+  // lê a quantidade de objetos
   int numObjects = Integer.parseInt(fileLines[cursorPosition++]);
   
   // lê os objetos
@@ -154,5 +165,15 @@ void load(String fileName) {
   }
 
   // inicializa o mundo depois que todos os objetos foram configurados para que a física funcione corretamente
-  world.init(figureName, new PVector(Integer.parseInt(worldDimensions[0]), Integer.parseInt(worldDimensions[2])), new PVector(Integer.parseInt(worldDimensions[1]), Integer.parseInt(worldDimensions[3])));
+  world.init(
+    figureName, 
+    new PVector(Integer.parseInt(worldDimensions[0]), 
+    Integer.parseInt(worldDimensions[2])), 
+    new PVector(Integer.parseInt(worldDimensions[1]), 
+    Integer.parseInt(worldDimensions[3])),
+    cameraPosition,
+    cameraRotation,
+    cameraScale,
+    observer
+  );
 }
