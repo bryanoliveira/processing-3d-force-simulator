@@ -100,6 +100,10 @@ void keyPressed() {
         break;
       case 'b':
         world.useScanLine = !world.useScanLine;
+        break;
+      case 'x':
+        switchScene();
+        break;
     }
   } else {
     switch(keyCode) {

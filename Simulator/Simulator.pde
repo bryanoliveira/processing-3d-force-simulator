@@ -1,5 +1,11 @@
 import java.util.*; 
 
+int selectedScene = 0;
+String[] scenes = {
+  "scenes/scene1.dat",
+  "scenes/scene2.dat"
+};
+
 Screen screen;
 World world;
 PVector[] observer; // observador/câmera
@@ -8,6 +14,7 @@ float lastTime = 0;
 
 final int axisEdges = 9;
 final int axisVertices = 12; 
+
 
 void setup() {
   size(1280, 720);
@@ -29,7 +36,7 @@ void setup() {
 
   lastTime = millis();
   
-  load("scenes/scene1.dat");
+  load(scenes[selectedScene]);
 }
 
 
@@ -64,6 +71,15 @@ void mousePressed() {
 
 void mouseReleased() {
   int mY = height - mouseY;
+}
+
+void switchScene() {
+  selectedScene = (selectedScene + 1) % scenes.length;
+
+  world = new World();
+  screen = new Screen();
+
+  load(scenes[selectedScene]);
 }
 
 
