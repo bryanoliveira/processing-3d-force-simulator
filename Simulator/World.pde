@@ -22,7 +22,7 @@ class World {
   
   World() {
     position = new PVector(0, 0, 1000);
-    rotation = new PVector(HALF_PI, 0, 0);
+    rotation = new PVector(0, 0, 0);
     scale = new PVector(1, 1, 1);
     physics = new GlobalPhysics();
   }
@@ -102,22 +102,7 @@ class World {
       Face[] faces = object.getFaces();
       
       // projeta
-      switch(projection) {
-        case 1:
-          computedVertices = cabinet(computedVertices);
-          break;
-        case 2:
-          computedVertices = isometric(computedVertices);
-          break;
-        case 3:
-          computedVertices = perspectiveZ(computedVertices);
-          break;
-        case 4:
-          computedVertices = perspectiveXZ(computedVertices);
-          break;
-        default:
-          computedVertices = cavalier(computedVertices);
-      }
+      computedVertices = perspectiveZ(computedVertices);
       
       computedVertices = adjustDevice(computedVertices, limitMin, limitMax);
       boolean select = (selectedObject == object.index)?true:false;  
@@ -185,15 +170,6 @@ class World {
     }
     noStroke();
 
-  }
-  
-  void circleProjection(int step) {
-    // Recebe 1 ou -1 e cicla sobre as projeções disponíveis
-
-    projection = (projection + step) % 5; // 5: número de projeções disponível
-    if(projection == -1) {
-      projection = 4;
-    }
   }
   
   /**** GERENCIAMENTO DOS OBJETOS DA CENA ****/

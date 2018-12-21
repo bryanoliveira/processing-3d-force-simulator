@@ -46,25 +46,8 @@ class Screen {
   }
   
   void showProjection(int projection) {
-    String projectionName = "(P)rojeção Oblíqua Cavaleira";
-    
-    switch(projection) {
-      case 1:
-        projectionName = "(P)rojeção Oblíqua Cabinet";
-        break;
-      case 2:
-        projectionName = "(P)rojeção Ortográfica Isométrica";
-        break;
-      case 3:
-        projectionName = "(P)rojeção Perspectiva Z";
-        break;
-      case 4:
-        projectionName = "(P)rojeção Perspectiva X+Z";
-        break;
-    }
-    
     textAlign(RIGHT);
-    addText(projectionName, new PVector(width - 2 * defaultPadding, height - (defaultPadding + defaultTextSize)), defaultTextSize, color(130));
+    addText("Projeção Perspectiva Z", new PVector(width - 2 * defaultPadding, height - (defaultPadding + defaultTextSize)), defaultTextSize, color(130));
     textAlign(LEFT);
   }
   

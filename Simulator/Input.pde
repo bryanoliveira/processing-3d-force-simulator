@@ -85,12 +85,6 @@ void keyPressed() {
       case '.':
         world.destroySelected();
         break;
-      case 'p':
-        world.circleProjection(1);
-        break;
-      case 'P':
-        world.circleProjection(-1);
-        break;
       case 'b':
         world.useScanLine = !world.useScanLine;
     }
