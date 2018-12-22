@@ -79,6 +79,12 @@ void keyRepeat() {
         case '4':
           world.accelerateSelected(-60, 0, 0);
           break;
+        case '9':
+          world.accelerateSelected(0, 0, 60);
+          break;
+        case '7':
+          world.accelerateSelected(0, 0, -60);
+          break;
       }
     }
   }

@@ -33,7 +33,7 @@ public class Physics implements ComponentInterface {
 
         PVector tempAcc = acceleration.copy();
 
-        tempAcc.add(new PVector(0, -9.80665, 0)); // gravidade
+        //tempAcc.add(new PVector(0, -9.80665, 0)); // gravidade
 
         velocity.add(tempAcc.mult(deltaTime));
     }
