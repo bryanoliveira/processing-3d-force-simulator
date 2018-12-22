@@ -94,6 +94,7 @@ public class Object {
     init(vertices, arestas, position);
     this.rotation = rotation;
     this.scale = scale;
+    ((Collider) getComponent(new Collider(null))).init();
   }
   public void init(float[][] vertices, int[][] arestas, PVector position, PVector rotation, PVector scale, Face[] faces) {
     init(vertices, arestas, position, rotation, scale);
@@ -112,6 +113,7 @@ public class Object {
   }
   public void rescale(PVector delta) {
     scale.add(delta);
+    ((Collider) getComponent(new Collider(null))).init();
   }
 
   PVector calcMassCenter() {
@@ -188,7 +190,6 @@ public class Object {
     // Retorna as faces visíveis do objeto
     
     ArrayList<Face> facesToDraw = new ArrayList<Face>();
-    
     // calcula a distância das faces e a normal
     for(int i = 0; i < faces.length; i++) {
       // calcula a normal

@@ -62,7 +62,7 @@ public class GlobalPhysics {
             Limit l1 = limitsX.get(i);
  
             for(int j = i + 1; j < limitsX.size(); j++) {
-                Limit l2 = limitsX.get(i + 1);
+                Limit l2 = limitsX.get(j);
             
                 if(l1.end >= l2.start) { // potencial colisão
                     Limit[] collision = {l1, l2};
@@ -76,7 +76,7 @@ public class GlobalPhysics {
             Limit l1 = limitsY.get(i);
 
             for(int j = i + 1; j < limitsY.size(); j++) {
-                Limit l2 = limitsY.get(i + 1);
+                Limit l2 = limitsY.get(j);
             
                 if(l1.end >= l2.start) { // potencial colisão
                     Limit[] collision = {l1, l2};
@@ -90,7 +90,7 @@ public class GlobalPhysics {
             Limit l1 = limitsZ.get(i);
 
             for(int j = i + 1; j < limitsZ.size(); j++) {
-                Limit l2 = limitsZ.get(i + 1);
+                Limit l2 = limitsZ.get(j);
             
                 if(l1.end >= l2.start) { // potencial colisão
                     Limit[] collision = {l1, l2};
@@ -114,6 +114,8 @@ public class GlobalPhysics {
          */
 
         // para cada potencial colisão
+        // println("hey  " + potentialCollisions.size() + "  " + millis());
+
         for(int i = 0; i < potentialCollisions.size(); i++) {
             Limit[] collision = potentialCollisions.get(i);
             Object obj1 = collision[0].object;
@@ -171,7 +173,7 @@ public class GlobalPhysics {
 
                     if(prod > 1) outside = true;
                 }
-
+                
                 if(!outside) {
                     intersectionPoints.add(obj1.computedVertices[j]);
                 }
