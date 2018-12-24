@@ -33,7 +33,6 @@ public class Collider implements ComponentInterface {
         }
 
         this.radius = max - min;
-        println(this.radius + "  " + millis());
     }
 
     public void run() {

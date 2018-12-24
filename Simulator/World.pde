@@ -96,6 +96,8 @@ class World {
       // translada no mundo
       object.computedVertices = translateMatrix(object.computedVertices, position);
       object.computedAxisVertices = translateMatrix(object.computedAxisVertices, position);
+
+      object.calcMassCenter();
     }
     
     // ordena os objetos de acordo com o z
