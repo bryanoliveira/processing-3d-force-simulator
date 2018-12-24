@@ -4,7 +4,6 @@ int selectedScene = 0;
 String[] scenes = {
   "scenes/scene1.dat",
   "scenes/scene2.dat",
-  "scenes/scene3.dat",
   "scenes/scene4.dat"
 };
 
