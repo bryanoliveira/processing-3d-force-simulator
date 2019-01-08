@@ -1,2 +1,4 @@
-# cg-processing-algorithms
-A collection of Processing's Computer Graphics algorithms using only the point() function.
+# cg-processing-simulator
+Physics simulator using only Processing's point() and line() function
+
+![Demo](https://raw.githubusercontent.com/bryanlincoln/cg-processing-simulator/master/Demo.gif)
