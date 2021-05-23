@@ -13,4 +13,4 @@ The program interface allows for real-time selection, positioning, rotation, sca
 
 ---
 
-This program was developed as final project for the 2018/2 Computer Graphics (INF0037) class of Computer Science at Universidade Federal de Goiás (UFG, Brazil).
+This program was developed as the final project for the 2018/2 Computer Graphics (INF0037) class of Computer Science at Universidade Federal de Goiás (UFG, Brazil).
