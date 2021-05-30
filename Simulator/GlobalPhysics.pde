@@ -57,7 +57,7 @@ public class GlobalPhysics {
         ArrayList<Limit[]> collisionsY = new ArrayList<Limit[]>();
         ArrayList<Limit[]> collisionsZ = new ArrayList<Limit[]>();
 
-        // analiza a lista de colisão em X
+        // analisa a lista de colisão em X
         for(int i = 0; i < limitsX.size() - 1; i++) {
             Limit l1 = limitsX.get(i);
  
@@ -71,7 +71,7 @@ public class GlobalPhysics {
             }
         }
 
-        // analiza a lista de colisão em Y
+        // analisa a lista de colisão em Y
         for(int i = 0; i < limitsY.size() - 1; i++) {
             Limit l1 = limitsY.get(i);
 
@@ -85,7 +85,7 @@ public class GlobalPhysics {
             }
         }
 
-        // analiza a lista de colisão em Z
+        // analisa a lista de colisão em Z
         for(int i = 0; i < limitsZ.size() - 1; i++) {
             Limit l1 = limitsZ.get(i);
 

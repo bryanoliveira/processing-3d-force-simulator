@@ -30,24 +30,24 @@ class Screen {
   void showHelp() {
     int offset = 6;
     addLine("Help", offset++, 1);
-    addLine("(Shift+)TAB: Seleciona objetos", offset++, 2);
-    addLine(".: Destrói o objeto selecionado", offset++, 2);
-    addLine("ad: Translação em X", offset++, 2);
-    addLine("ws: Translação em Y", offset++, 2);
-    addLine("qe: Translação em Z", offset++, 2);
-    addLine("fh: Escala em X", offset++, 2);
-    addLine("tg: Escala em Y", offset++, 2);
-    addLine("ry: Escala em Z", offset++, 2);
-    addLine("ik: Rotação em X", offset++, 2);
-    addLine("jl: Rotação em Y", offset++, 2);
-    addLine("uo: Rotação em Z", offset++, 2); 
-    addLine("b: Preenchimento (" + (world.useScanLine?"ScanLine)":"Processing)"), offset++, 2);
+    addLine("[Shift+]TAB: Select objects", offset++, 2);
+    addLine(".: Destroy selected object", offset++, 2);
+    addLine("a d: Translate X", offset++, 2);
+    addLine("w s: Translate Y", offset++, 2);
+    addLine("q e: Translate Z", offset++, 2);
+    addLine("f h: Scale X", offset++, 2);
+    addLine("t g: Scale Y", offset++, 2);
+    addLine("r y: Scale Z", offset++, 2);
+    addLine("i k: Rotate X", offset++, 2);
+    addLine("j l: Rotate Y", offset++, 2);
+    addLine("u o: Rotate", offset++, 2); 
+    addLine("b: Face rendering (" + (world.useScanLine?"ScanLine)":"Processing)"), offset++, 2);
   }
   
   void showInfo() {
     textAlign(RIGHT);
-    addText("Mudar cena(x)", new PVector(width - 2 * defaultPadding, (defaultPadding + defaultTextSize)), defaultTextSize, color(200));
-    addText("Projeção Perspectiva Z", new PVector(width - 2 * defaultPadding, height - (defaultPadding + defaultTextSize)), defaultTextSize, color(130));
+    addText("Change scene: X", new PVector(width - 2 * defaultPadding, (defaultPadding + defaultTextSize)), defaultTextSize, color(200));
+    addText("Projection: Perspective Z", new PVector(width - 2 * defaultPadding, height - (defaultPadding + defaultTextSize)), defaultTextSize, color(130));
     textAlign(LEFT);
   }
   

@@ -54,7 +54,7 @@ public class Collider implements ComponentInterface {
         // recebe um objeto que entrou em colisão e o ponto de origem da força de repulsão
         // https://en.wikibooks.org/wiki/Fundamentals_of_Physics/Linear_Momentum_and_Collisions
 
-        screen.addLine("Collision checked!", 5, 2);
+        screen.addLine("Collision!", 5, 2);
 
         Physics other = (Physics) with.getComponent(new Physics(null));
         PVector thisVelocity = physics.velocity.copy();

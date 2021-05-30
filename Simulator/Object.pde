@@ -78,7 +78,7 @@ public class Object {
     this.axisColors = new color[3];
     this.axisColors[0] = color(255, 0, 0);
     this.axisColors[1] = color(0, 255, 0);
-    this.axisColors[2] = color(0, 0, 255);
+    this.axisColors[2] = color(255, 255, 0);
 
 
     // inicializa os componentes
